@@ -1,0 +1,15 @@
+/*
+  this file creates the initial styles for the elements with the draggable class
+  see js/utils/draggable.js for the click/drag JavaScript logic
+*/
+.draggable {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  z-index: 1000;
+  cursor: grab;
+}
+
+.draggable > * {
+  cursor: auto;
+}

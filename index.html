@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Collaborative Artware</title>
+    <meta name="description" content="Experimental online drawing application by Media Art and Design students at the University of Chicago">
+
+    <!-- social media stuff -->
+    <meta property="og:title" content="Collaborative Artware">
+    <meta property="og:description" content="Experimental online drawing application by Media Art and Design students at the University of Chicago">
+    <meta property="og:image" content="imags/screenshot.png">
+    <!-- <meta property="og:url" content="..."> -->
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- <meta property="og:site_name" content="..."> -->
+    <meta name="twitter:site" content="@nbriz">
+
+    <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/draggable.css">
+
+  </head>
+  <body>
+
+    <section id="menu" class="draggable window-frame">
+      <div class="option" data-submenu="brushes">brushes</div>
+      <div class="option" data-submenu="filters">filters</div>
+    </section>
+
+    <section id="brushes" class="draggable window-frame" style="display: none;">
+      <div class="window-header">
+        <span>Brushes</span>
+        <span class="close">✖</span>
+      </div>
+    </section>
+
+    <section id="filters" class="draggable window-frame" style="display: none;">
+      <div class="window-header">
+        <span>Filters</span>
+        <span class="close">✖</span>
+      </div>
+    </section>
+
+    <script src="js/libs/p5.min.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/brushes/oscilattingCircles.js"></script>
+    <script src="js/brushes/eraser.js"></script>
+    <script src="js/filters/desaturate.js"></script>
+    <script src="js/utils/draggable.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
