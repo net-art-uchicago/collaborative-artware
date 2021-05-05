@@ -1,0 +1,18 @@
+{
+  "users": [
+
+     {
+        "id":"01",
+        "display_name": "ArtDude1",
+        "username": "artman1user",
+        "password": "artman1password"
+     }
+
+     {
+        "id":"02",
+        "display_name": "ArtDude2",
+        "username": "artman2user",
+        "password": "artman2password"
+     }
+  ]
+}
