@@ -18,8 +18,12 @@ router.get('/api/example', (req, res) => {
  */
 router.get('/api/listUsers', (req, res) => {
   fs.readFile('private/users_example.json', 'utf8', (err, data) => {
-    console.log(data)
-    res.end(data)
+    if (err) {
+      console.log('Error retrieving requested JSON')
+    } else {
+      console.log(data)
+      res.end(data)
+    }
   })
 })
 
@@ -39,8 +43,12 @@ router.get('/api/users/:id', (req, res) => {
  */
 router.get('/api/users/:id/username', (req, res) => {
   fs.readFile('private/users_example.json', 'utf8', (err, data) => {
-    var dataObj = JSON.parse(data)
-    res.end(dataObj.users.find(x => x.id === req.params.id).username)
+    if (err) {
+      console.log('Error retrieving requested JSON')
+    } else {
+      var dataObj = JSON.parse(data)
+      res.end(dataObj.users.find(x => x.id === req.params.id).username)
+    }
   })
 })
 
