@@ -39,7 +39,7 @@ router.get('/api/users/:id', (req, res) => {
  */
 router.get('/api/users/:id/username', (req, res) => {
   fs.readFile('private/users_example.json', 'utf8', (err, data) => {
-    var dataObj = JSON.parse(data);
+    var dataObj = JSON.parse(data)
     res.end(dataObj.users.find(x => x.id === req.params.id).username)
   })
 })
