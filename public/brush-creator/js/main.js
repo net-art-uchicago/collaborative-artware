@@ -33,6 +33,7 @@ var create = function(p){
       var brushName = p.select("#bname").value()
       var newBrushButton = p.createButton(brushName).parent(p.select(".brushesMade"))
       brushes.push({name: brushName, brush: stamp})
+      // stamp.canvas.toDataURL() base64encoding
       newBrushButton.mousePressed(()=>{
         var name = newBrushButton.html()
         for(var b of brushes){
@@ -49,6 +50,7 @@ var create = function(p){
       lines.push(line)
     }
     
+    // change / adjust code here to take in pre-define or differing shape?
     for(var line of lines){
       line.show()
     }

@@ -11,12 +11,27 @@
     <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/draggable.css">
+    <link rel="stylesheet" href="main.css" />
   </head>
   <body>
 
     <script src="../js/libs/p5.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/myLine.js"></script>
+    <div class="drawingPads">
+      <div id="create"></div>
+      <div id="test"></div>
+    </div>
+    <div class="settings">
+      <button id="clear">Clear</button>
+      <div name="saveBrush" id="saveContainer">
+        <input type="text" id="bname" name="bname" value="Enter Brush Name"><br>
+        <button id="save">Save</button>
+      </div>
+      <button id="stamp">Stamp</button>
+    </div>
+    <div class="brushesMade">
+    </div>
 
   </body>
 </html>
