@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- TODO: new name + project description -->
-    <title>Collaborative Artware</title>
+    <title>Collaborative Artware: Whiteboard</title>
     <meta name="description" content="Experimental online drawing application by Media Art and Design students at the University of Chicago">
     <!-- TODO: social media meta tags -->
     <!-- TODO: favicon -->
@@ -14,7 +14,17 @@
   </head>
   <body>
 
+    <input type="range" min="0" max="100" step="1" value="0"
+    onchange="brushColor(this.value)">
+    <div id="colorSlider"></div>
+
+    <input type="range" min="5" max="100" step="1" value="50"
+    onchange="brushSize(this.value)">
+    <div id="sizeSlider"></div>
+
     <script src="../js/libs/p5.min.js"></script>
     <script src="js/main.js"></script>
+
+    
   </body>
 </html>
