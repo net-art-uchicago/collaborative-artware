@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    border:3px solid red;
+}
+
+.drawingPads {
+    display: flex;
+    justify-content: space-around;
+    border: 2px solid purple;
+}
+
+.settings {
+    display: flex;
+    justify-content: space-evenly;
+    border: 2px solid blue;
+}
+.brushesMade {
+    display: flex;
+    flex-direction: column;
+    border:3px solid green;
+}
+canvas {
+    position: relative;
+    /* border: 2px solid black; */
+}
