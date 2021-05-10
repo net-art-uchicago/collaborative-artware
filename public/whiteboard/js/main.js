@@ -2,9 +2,18 @@
 
 let socket
 let me
+let canvas
+// global width and height
+const H = 320
+const W = 480
+
+// holds user info <UserId,User>
 let otherUsers = {}
-// hardcoded users
-const getUser = () => ({
+// holds p5 image objects, an array per user <UserId,Image[]>
+let brushes = {}
+
+// randomly generated user with some id and one out of the two brushes
+const getUserData = () => ({
   id: Math.floor(Math.random() * 1000),
   brushData: [
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAABmJLR0QA/wD/AP+gvaeTAAAa3klEQVR4nO2deZgeVZWH33QSQtKEQEgg7GtiEIIgqyjDEkAZwQ1QHgd3xAEBRSWKiIjoACIyomwjIDKgIxFxRRBBRFkiOxg2QQwhhAQwJGQl6e754/RHOqGXOrdu1a36vt/7POehgfrqnnur7q2qc88CQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghRDYGpVZAtCzDgG2AicCmQDswEhgFLAJeAp4C7gCeTaSjECISGwBHAJcAjwErgK6M8jhwMrBh6VoLIYIZBXwYuAnoJPuE70uWAd8F1i6zE0IIHxOBK4Al5J/0vclMYM/SeiOEyMQk4Bqgg2Imfk95FTiqnG4JIfqjHTgLWE7xE7+ndAKfKqF/Qog+OBR4jnInfk/pAA4svJdCiFVYEzPIpZr4PWUOMK7Y7gohGmwNPED6id9TLiu0x02KHIGElzcD12P7+lViBbA95jMwBHMq6skIzPmoJ6OAtu6/l2AOSAuAecWpWS20AAgPk4HreP3kajYWAU90y73ArcB9mL1BiJZkb4rb16+DzAd+ArwTe8MQomXYCZsAqSdhVWQOcAYwNs+gClEHtsBu+NSTroqyCNsJGRM8ukJUmKFYNF7qiVZ1mQd8BhgcNsxCVJOq7PPXRe4CtgoaaSEqxjtJP6HqKC8DhweMtxCVYQTwNOknU53lG2ibXdSUM0k/gZpBrkBbhqJmbIkl3kg9eZpFpqJFQNSIS0g/aZpNrqGiOwR5v1FGY3uhyyLoItKzCZaIc43UikRiAau67y7FvBkbdGIOTmBbnmthUYUjCtDlHGBKAectnTFY8odZ2OrWgSV5PAEYnlAvkZ9zSf+0jCF52QjbBTkTeDiiXh+KoFtSdgFm03cH7wTWS6adyMNQYC7pJ28VFoDV2R64GFicU6+FwPgC9CuFccDzDNzJm1MpKHLxbtJP3KouAA3GAZeTL+fhnVTUHjAQ55O9k4cm0lGEcy3pJ27VF4AG/wY8k0O/Y0vQMSqD8L0e3p5GTRHIUMxglnri1mUBAPvUvS1QvxcxA3ptGIO/kzsm0VSEsCfpJ23dFgCwvIi/CtTxmyXqmZuR+Dv4gySaihBOJf2kreMCALZlelOAjvOBdUrWNReP4OvgImrWwRbmt6SftHVdAMBe52cE6HliAl2DORl/Bz+bRFPh5SnST9qyF4BhmO/KXdj23MLuv4/n9clDs7AnvoKnXcD0gHaSsT7mSeXp4OMoIqrqDKecUl5VWgA2pv+05vd3H+Pl+wG67hrQTjKuwt9BVW2pNpNIP2HLXACGka2mwf343wTWxbIDeXT9hrONpIRYi3+RRFORlX1JP2HLXABOcJznuGxDuApnOHV9IKCNpNyPr4MrgM2SaCqycAjpJ2yZC8A0x3nuzDaEq7ABviKpHSQ0lrcNfMjruMB5/GBUwbXKrJ1agZJ5o+PY7QPOPwf4veP4NuAtAe0kYwT+75w5hFlWRfF8kvRP7DLfAF5xnGdBtiF8HUdVYAwashC4G/gCvYQ5h7wBLMZSHXlYHzgsoC1RPK22S/OI49jQbbo/Bv6uCNqxKN5zgHuwOg+vEbIAAFzEwCvt6tQuAEI0JVc5jr06sI2nqGaB0W2BX2KxH7m5Ef/riOIDqsfRpH9NLfMTYBjZDNn3ky8z0p2Jx6A/+UhDydA3AIALA37z6RztCRGDZcDB9L/99kD3Ma/maOe5HL8tmoMbf+RZAH6DxUR7+CCKDxDpmQXsjrn99nQFvrP7v+3efUweXsn5+yIJ8XLslS/jf/1QfEC1aLVPgLKocn7FexpK5nkDALgUf0bgY2g9y7NoPR5PrUAW8i4Ac4GfOX8zATggZ7tCVJ1fsWoK8kqSdwGAMGOgtgRFs/M8lla80sRYAO7AH9BwMIoPEM3PN/G7zpdKjAUAFB8gRG90YhGFk4GfszKtftMxHHgJnyVyLpZUUaRFuwDNgaemY7RdgAZLgCudvxmL6gcIkZRYCwDYZ0Cn8zcyBgqRkJgLwJPAH5y/2RPYOaIOQggHMRcACNsSPD6yDkK0IkHOdbEXgN8A/3T+5oNoS1CIvHhCfF8Lcoq9AHTgrwg0FIspEEKE4wldfs19P/YCAGHxAZ/Al6tNxKNVt82aDU/KvUIXgLnAVOdvhgAXU4w+on+8i3XVqbz/fUG0O45d2vijqAn3nYDf7IUShqRgYWoFIhOayLPujHEcu7jxR1ELwP1YxVQv3wLeHFkX0T8vp1YgMlXMxVcGngVgbuOPIl+5QyKh1sQ+H8ZG1kX0zT9SKxCZv6dWIAFtWEGSrDzf84dF8Ufg+oDfbQX8ml5ymItCmElz2QFqkYgjMptg8ThZmdP4o2ij2xRsa9DL7lhCBY9hQ4TRATyYWomI3JtagQRMcB4/u/FH0QvAdOB7gb+dDNwAjI6njuiD21IrEIkuqlWUoywmOY9/ohAt+qAdixMIDe18AphYpsItyEGkD+GNIbWrtBuJqWQfo4Uk2G7fB3vVDL2wC4CPlq10C7EG8CLpJ3Be+WLsgakBg7AU5lnH6O40asLXMirYn/wCxQ0UxcWkn8B5pAMzhrUau+Ibp8vTqGmvHSHlxFaXhcDpwKhy1W96JmH5HFJP5FDxep82C2fjG6ePp1HTWA94tBelQuRfmK+B3gjicT3pJ3KIdAJvKmA8qs4wzKLvGavNk2jagy2wummxLv4K4PfYyjauxH40I7uRz1aTSv6viMGoAZ/AN05PplHz9eyAuSMWcTP8DYtIPA44EIsyHI3PUaKVuZT0E9ojC4hY665GjMScuDxjFbolXwjb4X99kQwsCzFL70mEeVOOZWX66jrIcQF9bAa+h3+sdk2iaT9MIJ+PgKR/eQzYOvPVWMkB1ONT4Oe0Zp3Jj+Efq+lJNM3AGOBPpL+ZmlUeI+xNIMa2bdH9asVS80cDy/GP1+dTKJuVNbBXmjpvQ1VZvpD9UrzGIKprD3iWClizS2ZL4KeEjdcLmM2g8hyCKZv6Bms2+avnIvRgCGZhT61/T5mF2Y9agTYsMO5Kwp76DZlStuJ5GAdcTfobrZkkT5acNuD8CvShC3vtb+Yn/8bA/liq/KuJ8zCcRT9RtVU2oEwGvkvrrPZF8gqwds5zHAucS7p6jtdhvh5FZDBaD9gWcyrbFHMp3gDzNm1II+vuMMymsoge6bUxo+nqC+1S+s9RuG73udbrlsF5OtEHh2Dp+mtJG3Ak2inIK6GfAKvzJszPokzdF2BbfbEeVoOBPYBTsdiSGSX3p0y5LNKYJWcI8H7gL6Qf1DrK5/xD3idDgROxJ3GROndiRq8YTj5DgcOAH9McUY9Z5CHyv/VVkh2Bb+P3gmpVeZRivCBHY0/R2B6dHVhgTwzf/i2B/6L1HM5m0ALekW1YcdHTgD9j32OpB75q8iiWY7FIhmNP12uxdNMhenZimaSnECekd3PgCixOJPU1KFuex+wZmaiyEdDLMCykdSfMcLgZK405IzHjVSvEAyzCvL5+ClxEuYUy1sDcTffCYjC2wa7BWpghbSnmqvwvLHvv41gOv1vokao6B4Oxz52vk85YmZInsOxOzZbpWYgBWZ/W9ii9FttVEKLl2IHmtub3Jy+QOMmHECnZidax7PeUxVgJPmXNFi3LtsBLpJ+MZcpMLCWekt+IlmYDzNiVekIWLR2srK+xH5G9BYfEPJkQJTEY2+XYMrUikZmNPeFnAg8DdwHTKLCAa9UXgH2A92FJLRYB9wE/okdpI9GSnArsHfF8r2I+E9OxrcnZ2H76XMyXYDkry6gvwbYzwbaXG3OoESNAH//e8/hG3MBC7Ft+fnd7zVSjMRfrAr+j91eiJVhgimhNdiZfaGxD7sH8Bf4NcxUWFWEtzDlkoAt4TCoFRTKGYG+BoZN+CXAJtnMgKshgrDR4lou5ENgwjZoiEZ8mfPLfiHkmigrzbXwXtdJ5zkRU1iY88Oi0BPoKJ+/BnxOwVQtCtCJfJWzyh+RDFCWzBTAP/8X9ZQplRekMJ+zpf1EKZYWPNsKDOM5LoK8on//Ef288QGtGBNaOzxBu2Im5FyyqSRu2N++5L5ajXJK1YHPMwSdk8tc20aFw8V7898YFSTQVbn5G2OR/EqsoJJqfG/HdGy9j9Q1FxZlM2OR/CXhDAn1F+WyA3+vv9CSaCjchGX47sTznojU4Ht/9sRSFydaCdxD29D87hbIiGbfjuz9+lEZN4eUO/JP/UVZWZxHNzxb4HcN2CWhnQ+AcbKdhKRb99y8sxdjtmLPZV4B3I9tCFA4k7Om/XwplRTJOwv+A8LIfNtk9n6APY6XTM6feFqsS8u1/VRJNRUpuwnePfM15/glYTH7Iw6ghDwBfxOr6iQzsjH+Q5yHDTqsxHAvd9dwnE51txCx7vgCrQKSt6QG4CP/gnppEU5GSA/DdIw85zz+c8CpG/ckrwFlYTguxGsPxB/wsQMUOWpFv4btPznGef6Lz/F55Gtjf2+lm52P4B1Lbfq3J/fjukwOd53+D8/wh0ollH2rKCr0hePd0l6Bv/1ZkFJY003OfeGs+FvUJ0Js8jjIRsQ3+gftBEk1FavbDd5/cFNjOT5zt5JEXgLcG6lkobSW1896A31weXQtRB7zOPLcHtnMqZmMqgzHAH4AjSmqvcng9/x5Lo6aoAFPx3Sv/nqOtfSm3tFgHLbgIbIjvm64L+FISTUUVeBrfvZLXPXcDzNj8KH7fgxBZhkXCtgzedE4rgI2TaCpSMwbfvfJUATq0A5sA2wOHY/v6N2MTN9YiMJ8Wqk1wA77BuTWNmqIC7I/vXikzK/S62Fb2LU4d+5LnaIHgojXxb7d8Lommogoch+9e+UoaNdkDS0mXdxG4tmzFy8a7pdMFjE+iqagC38d3r4TsLsXk7cA/ybcIfLh0rUvkDHyDMT2NmqIi/AHf/eINACqCkdiWdegCMA/YtHStS8Lr/XdmGjVFRZhJ9ntlGdUqbz8F/25XQ36WQN/CGYnVXfcMxD5JNBVVYC18GYAeTqNmvxyB7WKFLAJvS6BvoXjz/i1GlVxamTfju1+uS6PmgBxL2AJwFzCobGWLdAXew3n8nVhONtGabO48/p+FaJGfC/GHJwPsDrw/si4DUuQCsJvz+FsK0ULUhc2cx88oRIs4fBm4O+B3Z1CyXaPIxnZ1Hl9nB6A2LOJxB+xG3gyz7G6K5YtbA/MwG87Kz5ylmOvpIsxWMg94Fnim+58zgUe6ZXlJ/UjJRs7jq7wArMCchu4Fhjl+Nx44EriiCKXKZCt83z9LqFfK77GYwecCbKfjFcK3gbJYu+8DfggcgyWzbEZ+jG9c6uBKezr+6/2XJJpG5gh8nb4jjZqZGYRZac/GJmPodk8smQFcBnyA5sk/dxu+MahDJt4R+B2FOrGaCLXmO/g6fW4aNQdkOyzd9JOknfD9yRLg15hHWXsxw1AKnijApSSwmAdyOP5rWnvvQG/u/w+kUbNX1gQ+juV8Tz25vfIycD71/ExYSvZ+zkykYyi34ruO30+jZhyGYIYtT4er8MqzAWaFnUv6iZxXOoDrMV+MOjwpR+Lr371p1AzmXfj69+s0asZhJ3ydnZNGzdcYiVV3mU/6iVuEPIS9hlaZLfH16fo0agYzAV//7ixLsSL8ALzbf6V1djWGAydjBrWzaN70zZOAa4A/A3sn1qUvRjuPf6EQLXpnFHAKdp/OxBbUC/AFInm2AgEGO4+vFJfiW+1OTqDj27FsMqmfzinkGqqXcent+PoQ4mkXwmTg+T50WA4cn/E8n+njHH1JaKbjSvAgvs6WWfV3HOWmg66qLAA+S3Wi6T6IT/9TStDprWRLA/ahAc6zJvBEhvP0lCvjdqU82vFFQ63AvsHL4H34SkG3gtwHvDHPoEbiBHx6Z33yhjIY88DMostS4KA+zjOEsAfO5wvoUym8DV9HvUUdQxhOWFHSVpHFWOLWlJyKT+ePFKzP3k59OrAyYLth99to7IHjfRtuSGmhwbFfAb0GwHsit78622J55rcruJ0GL2D+Aw9hxsVngFnYm8c8zMtrfvexg4B1sKfN2tg25MZYRtotMePdjhRfHLWxQB4EfAJ4seD2esPrwPRKIVqsxFucpA04ulvy8jwlGsZjLwDegStyP3d/bPKvU2AbT2NprG7GrOzPOX7bhS0KYJPuH30ctxmwJ9afyRTnM/EuYFr3P8tOzeZ1Zy66oo/Xah+TqdgbRS3xGjveUpAeR+PPRpRVHgFOI10+ujdg2XD/1o+OeWQ+8M7SemP80KmjN9Tcy2FOfWLJCiyQrpaMxpfSaTn+qq5ZONOhQ1ZZjBUr3bEAffOwPfBd4jsxraDc9OzXOPUr+pNuJOZWXfYCUFvrP/j3cmMbAAcB5zl1GEjmYl6CVY88G4nl1I/t23BGSfr/1qlXGeW2T3TqlFdexOxAteU0fB2OWf13EPA9Z/v9yTzsNbtuobZDsc+fZ4g3FudSfDyBN1imjDTabZjLcRmTv5MmKBrqXcVjbj3FmvwdwMX4XVOrxprAScRLVHIhxS4Cdzn1KetJuR5mEC16Afh6Sf0pjEHYK4yn07EyunzR2W5f8iDFGSVTsSlWfirG+JxVoJ73OHUpcmdndTbEytUXNfnPox4Rm/2yDb5OLyLOFuQR+AyPvUkHlumnTinJvLwH81HIe7OeUJB+XoeZIozH/TEauNGp40DyKuaO3RT8B77O3xahzb3wJZHoTZ7D9tdbgY3wl97qbbEsInV1VrfbhqSIlhuMGQYXOHXtTR7C6iA0DefjG4C80VzjgNnONleXv2Kvd61EG2aszfPWtBS/x+dA/N3Rfmfktr1sjBlGQxaC6VjW36oEYUVjGr6BOCxHW4Mxz7s8k38qlrCxVTkcf9amnjIDGBNRH08+wK6I7eZhJJbK7mrMAa63RLGvYOnxzsbvJVsbhpEtbLKn5NnGCUm13FPOpwmMLhHYBcvGFDqONxIvocyzzraryHCsutEOmLfm+tQ8sUdW9sB38WblaGsv8qXk/jaa/D3ZFrseoeN5eiQ9vDqICuHNdhJa1HEY8KizrZ7yrcB2G2yCpTufjrnezgZ+Sd+x4HVhPOGOQ8uJ45fvfQPQIl4hvBVdvhTYzhnOdnrK/5Lvpnk3/TvVXEm9txHHE54NeTr5o+e8C5AWgArh9T/fN6CNSYRH991Cvsm5W8a2L8zRRhXYnXDDYF4noRnO9oosaiscjMV34VYQ5l8favV/ivxeY1ndVDupXrSgl4MJs7GsIN++trd8VtNto9WVg/FduJAIwHc422jIUmDnsG69xnhnm9/J2V4V+Cph453HuesfzrZaeQu3Unwd34X7gfP8bYSX6Do2vFuvcaizzb9FaDM1bcANhI35oYFtej8ji06TJjLi9Y8+ynn+I53nb8gNOfrUE2+V405s/7fujMFvme/CJnKIQdDrCjwurFsiJoOwuHnPhZvkPL/3xugCFhIvb94uAe0X4SufgkMIW3xPDGjrPmcbmwf2SURkIr6LtgCfZ9RBzvPnuQH7Yij+mPq67wb05Gr84z8L/1vA7c426lj9uOn4CL6Ldovz/Dc5z9+FOQrFthD/LkCHZmEMYWHE3vTY3ijF7XP0SfQgz37q7s7jpzmOnYSlwPZyCrYlFZNbncdPpHmiDF8kLFvNFHxve0uc50+ZtrupqOoCcBR+b6+7CHcz7o8/Bvxmn+hapONiLFzXw9b4dgSWOs/vLSQiIjMCv2de1qfiYCxRh/e18x35u9UrQ/Cn3f6fgnRJRUie/F85zn+l89xl1y0Qq+GtATjDce63OM/dhfmjF+kf/hunPk8UqEsKBuFPjrkUGJXx/Jc4z137DLpVIfQToMjX/5Bv///Gboyi8H4GjMeiB5uFLiyU2sMwsj+pvZ8AZVWUbnpCFwBvRt+/Oo715uhbAFzl/I2XEDtASNBTlbkaX+1DgAMzHuc1AmoBiEToAjDeefxdGY9rx5+a+wb8N5CXB1lZyDMrzWQIBLP5XOb8TdbFXAtAIkIXgI0cx3Zhnl5Z2At/6O5vnceH0IE/2KXZ3gDAagx42Bh4Y4bjvAtA3So2VZbQBcCTl30+VlwzC97X/y7MYagMvP4AW9J8LqsPAjOdvzkgwzF6A0hE6ALgqV++BtmdQrwLwMNYaq4yCLEDvC26Fum52Xl8lmvquZ9AjkDRCF0APN/DI8gWlz8By6jq4ffO4/PwMPCS8zdNVfyhG+8CsA9Wq7A/YgVvCSehC8DTzuOz5AE8Gf9efpkLQCd+O4DHVlIXvDEdawHv6+f/Dxng//fGC87jRWTOxu+sM6Wf83024HyLGPjJEpsfOnWcWrJ+ZeF1CnqW3mtBDMKyKHmvvTfYSEQmNFT3OmBvrNhiO/Z66I22a8gvCu/lqmyCPzT48pJ1LIvz8F+v2VhJ+C0wI/K+hBfcrHvuxdoznHi150Ol6MQb7dhbyz1YkpEQHU8pWMdUeF3BY8qzKC14JfD6b8eU+RRbInobzJ8/r54hbs11oI2wlGExxOuSLApiOyz2PsVNEBKjnpV24PEIOr5M+TaKMvky5V/35WjHoFJcSvk3wWyKdQSZEknPZkoN1hvthIVt55ELSumZyMxYyr8Jjiy4T/dE0HEZsFXBelaBj1Luwh+zJLmIxAHYq1mzPAFiGDfPLkHPquBN5hEiHdS/CGtTcxTF3wQ3Y1l6iybvAvAQzf3tvzojgHsp9tp/vrTeiGA+SXFvAj+nvEmV5xNgFrBZSXpWiXWAP1PMtf9aif0QOTmAuDaBFcA5+DLM5uWkQF2fwpJhtioj8JeK70+WAZ8qtQciCmOw3YG8W4QP4089FoN24DGnrlNRvboG78UMdnmu/d3I26/2bIcVA/V60f0JCw4p86m/OluTbRGYRnHZiOtMO/BpLJ2459pPAw4nX7p64aAMl8p2LCZ8f6zgxwRgbSwK7EVgLlYD8E9YpNlTJeiUhRHAMZjL8XbYgjQP0/UOLK7h/mTa1YM2rL7iZCwGZFNs63gsNpZzsEpKfwGuxxZdIYQQQghRKP8P5t9f2C2seY8AAAAASUVORK5CYII=',
@@ -15,48 +24,60 @@ const getUser = () => ({
 
 function preload () {
   me = getUserData()
-  me.brushes = me.brushData.map(loadImage)
+  brushes[me.id] = me.brushData.map(loadImage)
 }
 
 function setup () {
-  createCanvas(window.innerWidth, window.innerHeight)
-
+  canvas = createCanvas(W, H)
+  background(255)
   // connecting to socket
   socket = io.connect('http://localhost:8000')
 
   // on connect, send your user to server
   socket.on('connect', () => {
-    // remove the brush p5 image objects before sending data
-    const { brushes, ...data } = me
-    // add the socket id so server knows your id, to send back all
-    // the other users info
-    data.socketId = socket.id
-    socket.emit('newUser', data)
+    socket.emit('newConnection', me)
   })
 
   // receive info for a new user
-  socket.on('newUser', (newUser) => {
-    newUser.brushes = newUser.brushData.map(loadImage)
+  socket.on('newConnection', (newUser) => {
+    brushes[newUser.id] = newUser.brushData.map(loadImage)
     otherUsers[newUser.id] = newUser
   })
 
+  // disconnect user
+  socket.on('newDisconnect', (userId) => {
+    delete otherUsers[userId]
+    delete brushes[userId]
+  })
+
+  // send existing info to a new user
+  socket.on('sendExistingInfo', (socketId) => {
+    // copy other users and add urself
+    const existingUsers = { ...otherUsers, [me.id]: me } 
+    // convert canvas to base64 to send
+    const canvas64 = canvas.canvas.toDataURL()
+    // send data as well as socketId
+    socket.emit('sendExistingInfo', { socketId, existingUsers, canvas64 })
+  })
+
   // receive info for existing users, which you will only do if you just joined
-  socket.on('getExistingUsers', (existingUsers) => {
+  socket.on('getExistingInfo', ({ existingUsers, canvas64 }) => {
+    loadImage(canvas64, (img) => image(img, 0, 0, W, H))
     otherUsers = existingUsers
     for (const id in otherUsers) {
-      otherUsers[id].brushes = otherUsers[id].brushData.map(loadImage)
+      brushes[id] = otherUsers[id].brushData.map(loadImage)
     }
   })
 
   // receive event of someone else drawing
   socket.on('draw', (data) => {
-    image(otherUsers[data.id].brushes[otherUsers[data.id].currBrush], data.x, data.y, 30, 30)
+    image(brushes[data.id][otherUsers[data.id].currBrush], data.x, data.y, 30, 30)
   })
 }
 
 function draw () {
   if (mouseIsPressed) {
-    image(me.brushes[me.currBrush], mouseX, mouseY, 30, 30)
+    image(brushes[me.id][me.currBrush], mouseX, mouseY, 30, 30)
     // send drawing data
     socket.emit('draw', { x: mouseX, y: mouseY, id: me.id })
   }
