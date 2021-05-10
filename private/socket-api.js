@@ -5,15 +5,15 @@ module.exports = (socket, io) => {
 
   socket.on('newConnection', (user) => {
     // send all users back to the new user
-    socket.to(io.sockets.sockets.keys().next().value).emit('sendExistingUsers', socket.id)
+    socket.to(io.sockets.sockets.keys().next().value).emit('sendExistingInfo', socket.id)
 
     // send new user to all exisitng users
     socket.broadcast.emit('newConnection', user)
-    
+
     // add new user to object that olds all users
     socket.userId = user.id
   })
-
+  
   socket.on('sendExistingInfo', ({ socketId, ...data }) => {
     socket.to(socketId).emit('getExistingInfo', data)
   })
