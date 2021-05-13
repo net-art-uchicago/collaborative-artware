@@ -1,19 +1,75 @@
 /* global */
-var stamp; 
-var stampOn = false;
+var stamp = null; 
+var stampIMG = null;
+var testing = false;
 var lines = [];
 var brushes = [];
+var defaultBrushes = [
+  {
+    name: 'none',
+    draw: function(p){
+      for(var line of lines){
+        line.show()
+      }
+    }
+  },
+  {
+    name: 'ellipse',
+    draw: function (p) {
+      if (p.mouseIsPressed) {
+        const radius = p.sin(p.frameCount * 0.1) * 40
+        p.ellipse(p.mouseX, p.mouseY, radius, radius)
+      }
+    }
+  }, 
+  {  
+    name: 'wordbrush',
+    draw: function (p) {
+      if (p.mouseIsPressed) {
+        const radius = p.sin(p.frameCount * 0.1) * 40
+        let words = ["Collaborative", "Art" , "Ware","2021" ];
+        let word = p.random(words);
+        p.text(word, p.mouseX, p.mouseY, radius, radius)
+      }
+    }
+  },
+  {
+    name: 'rectangle',
+    draw: function (p) {
+      if (p.mouseIsPressed) {
+        const radius = p.sin(p.frameCount * 0.1) * 40
+        p.rect(p.mouseX, p.mouseY, radius, radius)
+      }
+    }
+  },
+  {  
+    name: 'linework',
+    draw: function (p) {
+      if (p.mouseIsPressed) {
+        const radius = p.sin(p.frameCount * 0.1) * 40
+        p.line(p.mouseX, p.mouseY, radius, radius)
+      }
+    }
+}
+]
+var currBrush = defaultBrushes[0];
+
+function updateBrush(bindex){
+  currBrush = defaultBrushes[bindex];
+}
 
 var create = function(p){
   /* local global */
   p.pad;
   p.clearBut;
   p.saveBut;
+  p.testBut;
 
   p.setup = () => {
     p.pad = p.select("#create")
     p.clearBut = p.select("#clear")
     p.saveBut = p.select("#save")
+    p.testBut = p.select("#test")
     p.cnvs = p.createCanvas(p.windowWidth / 2 , p.windowHeight / 2)
     p.cnvs.parent(p.pad)
   }
@@ -22,20 +78,26 @@ var create = function(p){
     p.resizeCanvas(p.windowWidth / 2, p.windowHeight / 2)
   }
 
-  p.draw = () =>{
+  p.draw = () => {
     p.clearBut.mousePressed(() => {
+      testing = false;
       p.clear()
       lines = []
     })
+
+    p.testBut.mousePressed(() => {
+      stamp = p.get().canvas.toDataURL();
+      testing = true;
+    })
     
     p.saveBut.mousePressed(() => {
-      stamp = p.get();
       var brushName = p.select("#bname").value()
-      var newBrushButton = p.createButton(brushName).parent(p.select(".brushesMade"))
+      stamp =  p.get().canvas.toDataURL() //base64encoding
+      var newBrushButton = p.createImg(stamp).parent(p.select(".brushesMade"))
+      newBrushButton.addClass("brushImg").id(brushName)
       brushes.push({name: brushName, brush: stamp})
-      // stamp.canvas.toDataURL() base64encoding
       newBrushButton.mousePressed(()=>{
-        var name = newBrushButton.html()
+        var name = newBrushButton.id()
         for(var b of brushes){
           if(b.name == name){
             stamp = b.brush;
@@ -51,10 +113,9 @@ var create = function(p){
     }
     
     // change / adjust code here to take in pre-define or differing shape?
-    for(var line of lines){
-      line.show()
+    if(p.mouseIsPressed){
+      currBrush.draw(p)
     }
-
   }
 }
 
@@ -65,12 +126,12 @@ var test = function(p){
   /* local global */
   p.pad;
   p.clearBut;
-  p.stampBut;
+  // p.testBut;
 
   p.setup = () => {
     p.pad = p.select("#test")
     p.clearBut = p.select("#clear")
-    p.stampBut = p.select("#stamp")
+    // p.testBut = p.select("#test")
     p.cnvs = p.createCanvas(p.windowWidth / 2 , p.windowHeight / 2)
     p.cnvs.parent(p.pad)
     p.background(225)
@@ -87,30 +148,15 @@ var test = function(p){
       p.background(225)
     })
         
-    p.stampBut.mousePressed(() => {
-      stampOn = true;
-    })
-
-    if(p.mouseIsPressed & stampOn){
-      p.image(stamp, p.mouseX, p.mouseY, 50, 50)
+    if (testing){
+      p.loadImage(stamp, stampIMG => {
+        if(p.mouseIsPressed){
+          p.image(stampIMG, p.mouseX, p.mouseY, 50, 50)
+        }
+      })
     }
+
   }
 }
 
 var testPad = new p5(test)
-
-function saveBrush(brushName, drawing) {
-  var brush = {
-      name: brushName,
-      brush: drawing
-  }
-  brushes.push(brush)
-}
-
-function getBrush(brushName){
-  for(var b of brushes){
-    if (b.name == brushName) {
-      stamp = b.drawing
-    }
-  }
-}
