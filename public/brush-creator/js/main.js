@@ -1,7 +1,6 @@
 /* global */
 var stamp = null; 
 var stampIMG = null;
-var testing = false;
 var lines = [];
 var brushes = [];
 var defaultBrushes = [
@@ -46,7 +45,7 @@ var defaultBrushes = [
     name: 'linework',
     draw: function (p) {
       if (p.mouseIsPressed) {
-        const radius = p.sin(p.frameCount * 0.1) * 40
+        const radius = p.sin(p.frameCount * 0.1) * 100
         p.line(p.mouseX, p.mouseY, radius, radius)
       }
     }
@@ -56,6 +55,7 @@ var currBrush = defaultBrushes[0];
 
 function updateBrush(bindex){
   currBrush = defaultBrushes[bindex];
+  stamp = null;
 }
 
 var create = function(p){
@@ -63,13 +63,11 @@ var create = function(p){
   p.pad;
   p.clearBut;
   p.saveBut;
-  p.testBut;
 
   p.setup = () => {
     p.pad = p.select("#create")
     p.clearBut = p.select("#clear")
     p.saveBut = p.select("#save")
-    p.testBut = p.select("#test")
     p.cnvs = p.createCanvas(p.windowWidth / 2 , p.windowHeight / 2)
     p.cnvs.parent(p.pad)
   }
@@ -80,32 +78,35 @@ var create = function(p){
 
   p.draw = () => {
     p.clearBut.mousePressed(() => {
-      testing = false;
       p.clear()
       lines = []
-    })
-
-    p.testBut.mousePressed(() => {
-      stamp = p.get().canvas.toDataURL();
-      testing = true;
     })
     
     p.saveBut.mousePressed(() => {
       var brushName = p.select("#bname").value()
-      stamp =  p.get().canvas.toDataURL() //base64encoding
-      var newBrushButton = p.createImg(stamp).parent(p.select(".brushesMade"))
-      newBrushButton.addClass("brushImg").id(brushName)
-      brushes.push({name: brushName, brush: stamp})
+      var brushStamp = p.get().canvas.toDataURL() // base64 encoding
+      var newBrushButton = p.createImg(brushStamp).addClass("brushImg").id(brushName).parent(p.select(".brushesMade"))
+      defaultBrushes.push({
+        name: brushName,
+        draw: function(p) {
+          p.loadImage(brushStamp, brushImg => {
+            if(p.mouseIsPressed){
+              p.image(brushImg, p.mouseX, p.mouseY, 50, 50)
+            }
+          })
+        }
+      })
+
       newBrushButton.mousePressed(()=>{
-        testing = false;
         var name = newBrushButton.id()
-        for(var b of brushes){
+        for(var b of defaultBrushes){
           if(b.name == name){
-            stamp = b.brush;
+            currBrush = b;
             return;
           }
         }
       })
+  
     })     
     
     if (p.mouseIsPressed) {
@@ -116,6 +117,7 @@ var create = function(p){
     // change / adjust code here to take in pre-define or differing shape?
     if(p.mouseIsPressed){
       currBrush.draw(p)
+      stamp = p.get().canvas.toDataURL();
     }
   }
 }
@@ -127,12 +129,10 @@ var test = function(p){
   /* local global */
   p.pad;
   p.clearBut;
-  // p.testBut;
 
   p.setup = () => {
     p.pad = p.select("#test")
     p.clearBut = p.select("#clear")
-    // p.testBut = p.select("#test")
     p.cnvs = p.createCanvas(p.windowWidth / 2 , p.windowHeight / 2)
     p.cnvs.parent(p.pad)
     p.background(225)
@@ -148,15 +148,14 @@ var test = function(p){
     p.clearBut.mousePressed(() => {
       p.background(225)
     })
-        
-    if (testing){
+    
+    if(stamp){
       p.loadImage(stamp, stampIMG => {
         if(p.mouseIsPressed){
           p.image(stampIMG, p.mouseX, p.mouseY, 50, 50)
         }
       })
     }
-
   }
 }
 

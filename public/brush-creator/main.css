@@ -4,10 +4,15 @@ body {
     border:3px solid red;
 }
 
-.drawingPads {
+.canvasContainer {
     display: flex;
     justify-content: space-around;
     border: 2px solid purple;
+}
+
+.drawingPad{
+    border: 2px solid salmon;
+    margin: 3px;
 }
 
 .settings {
