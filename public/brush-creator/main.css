@@ -14,11 +14,24 @@ body {
     display: flex;
     justify-content: space-evenly;
     border: 2px solid blue;
+    padding-top: 15px;
 }
 .brushesMade {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
+    border:3px solid orange;
+}
+
+.defaultBrushes {
+    display: flex;
+    /* flex-direction: column; */
     border:3px solid green;
+}
+.brushImg {
+    border: 2px solid black;
+    height: 50px;
+    width: auto;
+    cursor: pointer;
 }
 canvas {
     position: relative;
