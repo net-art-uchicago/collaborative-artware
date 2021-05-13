@@ -45,8 +45,8 @@ var defaultBrushes = [
     name: 'linework',
     draw: function (p) {
       if (p.mouseIsPressed) {
-        const radius = p.sin(p.frameCount * 0.1) * 100
-        p.line(p.mouseX, p.mouseY, radius, radius)
+        const radius = p.sin(p.frameCount * 0.1) * 40
+        p.line(p.mouseX, p.mouseY, p.mouseX + radius, p.mouseY + radius)
       }
     }
 }
