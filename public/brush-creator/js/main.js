@@ -68,12 +68,12 @@ var create = function(p){
     p.pad = p.select("#create")
     p.clearBut = p.select("#clear")
     p.saveBut = p.select("#save")
-    p.cnvs = p.createCanvas(p.windowWidth / 2 , p.windowHeight / 2)
+    p.cnvs = p.createCanvas(p.windowHeight / 2 , p.windowHeight / 2)
     p.cnvs.parent(p.pad)
   }
 
   p.windowResized = () => { 
-    p.resizeCanvas(p.windowWidth / 2, p.windowHeight / 2)
+    p.resizeCanvas(p.windowHeight / 2, p.windowHeight / 2)
   }
 
   p.draw = () => {
@@ -85,7 +85,7 @@ var create = function(p){
     p.saveBut.mousePressed(() => {
       var brushName = p.select("#bname").value()
       var brushStamp = p.get().canvas.toDataURL() // base64 encoding
-      var newBrushButton = p.createImg(brushStamp).addClass("brushImg").id(brushName).parent(p.select(".brushesMade"))
+      var newBrushButton = p.createImg(brushStamp).addClass("brushImg").id(brushName).parent(p.select(".brushesContainer"))
       defaultBrushes.push({
         name: brushName,
         draw: function(p) {
@@ -133,13 +133,13 @@ var test = function(p){
   p.setup = () => {
     p.pad = p.select("#test")
     p.clearBut = p.select("#clear")
-    p.cnvs = p.createCanvas(p.windowWidth / 2 , p.windowHeight / 2)
+    p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
     p.cnvs.parent(p.pad)
     p.background(225)
   }
 
   p.windowResized = () => { 
-    p.resizeCanvas(p.windowWidth / 2, p.windowHeight / 2)
+    p.resizeCanvas(p.windowHeight / 2, p.windowHeight / 2)
     p.background(225)
   }
  

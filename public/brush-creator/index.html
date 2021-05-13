@@ -18,26 +18,33 @@
     <script src="../js/libs/p5.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/myLine.js"></script>
-    <div class="canvasContainer">
-      <div class="drawingPad" id="create"></div>
-      <div class="drawingPad" id="test"></div>
-    </div>
-    <div class="settings">
+    <div class="settingsContainer">
       <button id="clear">Clear</button>
       <div name="saveBrush" id="saveContainer">
         <input type="text" id="bname" name="bname" value="Enter Brush Name"><br>
         <button id="save">Save</button>
       </div>
     </div>
-    <div class="brushesMade">
-      <div class = "defaultBrushes">
-        <button class= "premade" id="none" onclick="updateBrush(0)">none</button>
-        <button class= "premade" id="ellipse" onclick="updateBrush(1)">ellipse</button>
-        <button class= "premade" id="wordbrush" onclick="updateBrush(2)">wordbrush</button>
-        <button class= "premade" id="rectangle" onclick="updateBrush(3)">rectangle</button>
-        <button class= "premade" id="linework" onclick="updateBrush(4)">linework</button>
+    <div class="appContainer">
+      <div class = "leftContainer">
+        <div class = "toolsContainer"></div>
       </div>
-    </div>
+      <div class = "rightContainer">
+        <div class="canvasContainer">
+          <div class="drawingPad" id="create"></div>
+          <div class="drawingPad" id="test"></div>
+        </div>
+        <div class="brushesContainer">
+          <div class = "defaultBrushes">
+            <button class= "premade" id="none" onclick="updateBrush(0)">none</button>
+            <button class= "premade" id="ellipse" onclick="updateBrush(1)">ellipse</button>
+            <button class= "premade" id="wordbrush" onclick="updateBrush(2)">wordbrush</button>
+            <button class= "premade" id="rectangle" onclick="updateBrush(3)">rectangle</button>
+            <button class= "premade" id="linework" onclick="updateBrush(4)">linework</button>
+          </div>
+        </div>
+      </div>
+
 
   </body>
 </html>
