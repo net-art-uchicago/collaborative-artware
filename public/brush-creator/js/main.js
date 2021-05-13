@@ -97,6 +97,7 @@ var create = function(p){
       newBrushButton.addClass("brushImg").id(brushName)
       brushes.push({name: brushName, brush: stamp})
       newBrushButton.mousePressed(()=>{
+        testing = false;
         var name = newBrushButton.id()
         for(var b of brushes){
           if(b.name == name){
