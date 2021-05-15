@@ -13,13 +13,34 @@
     <link rel="stylesheet" href="../css/draggable.css">
 
   </head>
-  <body>
-
+  <body id="desktop"> 
+    <div class="login">
+      <div class="login-header">
+        <span class="white-txt"> Login </span>
+      </div>
+      <div class="login-form">
+        <form action="POST"></form> 
+          <div class="login-entry">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br><br>
+          </div>
+          <div class="login-entry">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+          </div>
+            <button class="desktop-button" type="submit">OK</button>
+      </div>
+      <div class="login-footer">
+        <span id="footer-text"> Collaborative Artware 
+          (MAAD 23655) @UChicago 2021</span>
+      </div>
+    </div>
+<!--
     <section class="draggable window-frame">
       hello
     </section>
 
-    <iframe src="../brush-creator/index.html" class="draggable window-frame"></iframe>
+    <iframe src="../brush-creator/index.html" class="draggable window-frame"></iframe> -->
 
     <script src="../js/utils/draggable.js"></script>
     <script src="js/main.js"></script>
