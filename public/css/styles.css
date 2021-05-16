@@ -26,10 +26,6 @@ canvas {
   justify-content: space-between;
 }
 
-#saveButton {
-  margin: 50px 0px 0px 10px;
-}
-
 .option {
   margin: 10px;
   color: var(--theme-color-1);
