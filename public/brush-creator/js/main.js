@@ -1,4 +1,4 @@
-/* global */
+/* global p5 MyLine */
 let stamp = null
 let lines = []
 const defaultBrushes = [
@@ -51,16 +51,15 @@ const defaultBrushes = [
 ]
 let currBrush = defaultBrushes[0]
 
-const create = function (p) {
+const create = new p5((p) => {
   /* local global */
-  let pad, clearBut, saveBut
+  let clearBut, saveBut
 
   p.setup = () => {
-    pad = p.select('#create')
     clearBut = p.select('#clear')
     saveBut = p.select('#save')
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    p.cnvs.parent(pad)
+    p.cnvs.parent(p.select('#create'))
   }
 
   p.windowResized = () => {
@@ -107,21 +106,19 @@ const create = function (p) {
     // change / adjust code here to take in pre-define or differing shape?
     if (p.mouseIsPressed) {
       currBrush.draw(p)
-      stamp = p.get().canvas.toDataURL();
+      stamp = p.get().canvas.toDataURL()
     }
   }
-}
+})
 
-const test = function (p) {
+const testPad = new p5((p) => {
   /* local global */
-  let pad
   let clearBut
 
   p.setup = () => {
-    p.pad = p.select('#test')
-    p.clearBut = p.select('#clear')
+    clearBut = p.select('#clear')
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    p.cnvs.parent(pad)
+    p.cnvs.parent(p.select('#test'))
     p.background(225)
   }
 
@@ -143,7 +140,4 @@ const test = function (p) {
       })
     }
   }
-}
-
-p5(create)
-p5(test)
+})
