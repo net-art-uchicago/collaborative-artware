@@ -1,8 +1,13 @@
-/* global p5 MyLine brushManager */
-const bm = brushManager
+/* global p5 MyLine BrushManager */
+const bm = new BrushManager()
 let stamp = null
 let lines = []
 let currBrush = bm.getBrush('none')
+
+function updateBrush(bindex) {
+  currBrush = bm.getBrushbyIndex(bindex)
+  stamp = null
+}
 
 const createPad = p => {
   /* local global */
