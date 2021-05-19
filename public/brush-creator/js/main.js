@@ -74,6 +74,10 @@ const createPad = p => {
 
     saveBut.mousePressed(() => {
       const brushName = p.select('#bname').value()
+      if (brushName === '') {
+        window.alert('Name the brush before you save!')
+        return
+      }
       const brushStamp = p.get().canvas.toDataURL() // base64 encoding
       const newBrushButton = p.createImg(brushStamp).addClass('brushImg').id(brushName).parent(p.select('.brushesContainer'))
       defaultBrushes.push({
