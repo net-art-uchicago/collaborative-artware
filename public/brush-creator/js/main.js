@@ -1,34 +1,28 @@
-/* global p5 MyLine BrushManager */
+/* global p5 MyBrush BrushManager */
 const bm = new BrushManager()
 let stamp = null
-let lines = []
-let currBrush = bm.getBrush('none')
-
-function updateBrush(bindex) {
-  currBrush = bm.getBrushbyIndex(bindex)
-  stamp = null
-}
 
 const createPad = p => {
   /* local global */
-  let resetBut, saveBut
+  let createBrush
 
   p.setup = () => {
-    resetBut = p.select('#reset')
-    saveBut = p.select('#save')
+    createBrush = new MyBrush(p, bm.getBrushDraw('none'))
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-  }
 
-  p.windowResized = () => {
-    p.resizeCanvas(p.windowHeight / 2, p.windowHeight / 2)
-  }
-
-  p.draw = () => {
-    resetBut.mousePressed(() => {
-      p.clear()
-      lines = []
+    const premadeButs = p.selectAll('.premade')
+    premadeButs.forEach((premade) => {
+      premade.mousePressed(() => {
+        createBrush.updateShape(bm.getBrushDraw(premade.id()))
+      })
     })
 
+    const resetBut = p.select('#reset')
+    resetBut.mousePressed(() => {
+      p.clear()
+    })
+
+    const saveBut = p.select('#save')
     saveBut.mousePressed(() => {
       const brushName = p.select('#bname').value()
       if (brushName === '') {
@@ -38,34 +32,52 @@ const createPad = p => {
       const brushStamp = p.get().canvas.toDataURL() // base64 encoding
       const newBrushButton = p.createImg(brushStamp).addClass('brushImg').id(brushName).parent(p.select('.brushesContainer'))
       bm.addBrush(brushName, brushStamp)
-
       newBrushButton.mousePressed(() => {
-        currBrush = bm.getBrush(newBrushButton.id())
+        createBrush.updateBrush(bm.getBrushDraw(newBrushButton.id()))
       })
     })
-
-    if (p.mouseIsPressed) {
-      const line = new MyLine(p)
-      lines.push(line)
-    }
-
-    // change / adjust code here to take in pre-define or differing shape?
-    if (p.mouseIsPressed) {
-      currBrush.draw(p)
-      stamp = p.get().canvas.toDataURL()
-    }
   }
+
+  p.windowResized = () => {
+    p.resizeCanvas(p.windowHeight / 2, p.windowHeight / 2)
+  }
+
+  p.mousePressed = () => {
+    createBrush.down(p.mouseX, p.mouseY)
+  }
+
+  p.mouseDragged = () => {
+    createBrush.move(p.mouseX, p.mouseY)
+    stamp = p.get().canvas.toDataURL()
+  }
+
+  p.mouseReleased = () => {
+    createBrush.up(p.mouseX, p.mouseY)
+  }
+
+  p.draw = () => {}
 }
 
 const testPad = p => {
   /* local global */
-  let clearBut
+  let testBrush
+
+  function stampDraw (p, x1, y1, x2, y2) {
+    if (stamp) {
+      p.loadImage(stamp, stampImg => {
+        p.image(stamp, x1, y1, 50, 50)
+      })
+    }
+  }
 
   p.setup = () => {
-    clearBut = p.select('#clear')
+    const clearBut = p.select('#clear')
+    clearBut.mousePressed(() => {
+      p.background(225)
+    })
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    // p.cnvs.parent(p.select('#test'))
     p.background(225)
+    testBrush = new MyBrush(p, stampDraw)
   }
 
   p.windowResized = () => {
@@ -73,19 +85,19 @@ const testPad = p => {
     p.background(225)
   }
 
-  p.draw = () => {
-    clearBut.mousePressed(() => {
-      p.background(225)
-    })
-
-    if (stamp) {
-      p.loadImage(stamp, stampIMG => {
-        if (p.mouseIsPressed) {
-          p.image(stampIMG, p.mouseX, p.mouseY, 50, 50)
-        }
-      })
-    }
+  p.mousePressed = () => {
+    testBrush.down(p.mouseX, p.mouseY)
   }
+
+  p.mouseDragged = () => {
+    testBrush.move(p.mouseX, p.mouseY)
+  }
+
+  p.mouseReleased = () => {
+    testBrush.up(p.mouseX, p.mouseY)
+  }
+
+  p.draw = () => {}
 }
 
 const create = new p5(createPad, 'create')
