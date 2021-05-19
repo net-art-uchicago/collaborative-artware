@@ -51,7 +51,7 @@ const defaultBrushes = [
 ]
 let currBrush = defaultBrushes[0]
 
-const create = new p5((p) => {
+const createPad = p => {
   /* local global */
   let clearBut, saveBut
 
@@ -59,7 +59,7 @@ const create = new p5((p) => {
     clearBut = p.select('#clear')
     saveBut = p.select('#save')
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    p.cnvs.parent(p.select('#create'))
+    // p.cnvs.parent(p.select('#create'))
   }
 
   p.windowResized = () => {
@@ -109,16 +109,16 @@ const create = new p5((p) => {
       stamp = p.get().canvas.toDataURL()
     }
   }
-})
+}
 
-const testPad = new p5((p) => {
+const testPad = p => {
   /* local global */
   let clearBut
 
   p.setup = () => {
     clearBut = p.select('#clear')
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    p.cnvs.parent(p.select('#test'))
+    // p.cnvs.parent(p.select('#test'))
     p.background(225)
   }
 
@@ -140,4 +140,7 @@ const testPad = new p5((p) => {
       })
     }
   }
-})
+}
+
+const create = new p5(createPad, 'create')
+const test = new p5(testPad, 'test')
