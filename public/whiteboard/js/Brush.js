@@ -1,15 +1,16 @@
 class Brush {
-  constructor (img) {
+  constructor (img, p5) {
     // list brush properties here
     this.img = img
     this.size = 50
     this.color = '#000'
-    tint(this.color)
+    this.p5 = p5
+    this.p5.tint(this.color)
   }
 
   updateColor (c) {
     this.color = c
-    tint(this.color)
+    this.p5.tint(this.color)
   }
 
   updateSize (s) {
@@ -19,6 +20,6 @@ class Brush {
   draw (x, y) {
     x = x - this.size / 2
     y = y - this.size / 2
-    image(this.img, x, y, this.size, this.size)
+    this.p5.image(this.img, x, y, this.size, this.size)
   }
 }
