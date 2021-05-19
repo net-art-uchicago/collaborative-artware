@@ -53,13 +53,12 @@ let currBrush = defaultBrushes[0]
 
 const createPad = p => {
   /* local global */
-  let clearBut, saveBut
+  let resetBut, saveBut
 
   p.setup = () => {
-    clearBut = p.select('#clear')
+    resetBut = p.select('#reset')
     saveBut = p.select('#save')
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    // p.cnvs.parent(p.select('#create'))
   }
 
   p.windowResized = () => {
@@ -67,7 +66,7 @@ const createPad = p => {
   }
 
   p.draw = () => {
-    clearBut.mousePressed(() => {
+    resetBut.mousePressed(() => {
       p.clear()
       lines = []
     })
