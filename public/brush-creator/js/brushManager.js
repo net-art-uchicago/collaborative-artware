@@ -2,6 +2,11 @@ class BrushManager {
   constructor () {
     this.brushes = [
       {
+        name: 'TESTING',
+        draw: function (p, x1, y1, x2, y2) {
+        }
+      },
+      {
         name: 'none',
         draw: function (p, x1, y1, x2, y2) {
           p.line(x1, y1, x2, y2)
@@ -57,5 +62,17 @@ class BrushManager {
       }
     }
     return this.brushes[0].draw
+  }
+
+  updateBrush (name, newStamp) {
+    for (const b of this.brushes) {
+      if (b.name === name) {
+        b.draw = function (p, x1, y1, x2, y2) {
+          p.loadImage(newStamp, brushImg => {
+            p.image(brushImg, x1, y1, 100, 100)
+          })
+        }
+      }
+    }
   }
 }

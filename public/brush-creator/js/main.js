@@ -1,6 +1,6 @@
 /* global p5 MyBrush BrushManager */
 const bm = new BrushManager()
-let stamp = null
+const TEST = 'TESTING'
 
 const createPad = p => {
   /* local global */
@@ -33,7 +33,7 @@ const createPad = p => {
       const newBrushButton = p.createImg(brushStamp).addClass('brushImg').id(brushName).parent(p.select('.brushesContainer'))
       bm.addBrush(brushName, brushStamp)
       newBrushButton.mousePressed(() => {
-        createBrush.updateBrush(bm.getBrushDraw(newBrushButton.id()))
+        createBrush.updateShape(bm.getBrushDraw(newBrushButton.id()))
       })
     })
   }
@@ -48,7 +48,7 @@ const createPad = p => {
 
   p.mouseDragged = () => {
     createBrush.move(p.mouseX, p.mouseY)
-    stamp = p.get().canvas.toDataURL()
+    bm.updateBrush(TEST, p.get().canvas.toDataURL())
   }
 
   p.mouseReleased = () => {
@@ -62,14 +62,6 @@ const testPad = p => {
   /* local global */
   let testBrush
 
-  function stampDraw (p, x1, y1, x2, y2) {
-    if (stamp) {
-      p.loadImage(stamp, stampImg => {
-        p.image(stamp, x1, y1, 50, 50)
-      })
-    }
-  }
-
   p.setup = () => {
     const clearBut = p.select('#clear')
     clearBut.mousePressed(() => {
@@ -77,7 +69,7 @@ const testPad = p => {
     })
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
     p.background(225)
-    testBrush = new MyBrush(p, stampDraw)
+    testBrush = new MyBrush(p, bm.getBrushDraw(TEST))
   }
 
   p.windowResized = () => {
@@ -87,6 +79,7 @@ const testPad = p => {
 
   p.mousePressed = () => {
     testBrush.down(p.mouseX, p.mouseY)
+    testBrush.updateShape(bm.getBrushDraw(TEST))
   }
 
   p.mouseDragged = () => {
