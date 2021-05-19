@@ -1,55 +1,8 @@
-/* global p5 MyLine */
+/* global p5 MyLine brushManager */
+const bm = brushManager
 let stamp = null
 let lines = []
-const defaultBrushes = [
-  {
-    name: 'none',
-    draw: function (p) {
-      for (const line of lines) {
-        line.show()
-      }
-    }
-  },
-  {
-    name: 'ellipse',
-    draw: function (p) {
-      if (p.mouseIsPressed) {
-        const radius = p.sin(p.frameCount * 0.1) * 40
-        p.ellipse(p.mouseX, p.mouseY, radius, radius)
-      }
-    }
-  },
-  {
-    name: 'wordbrush',
-    draw: function (p) {
-      if (p.mouseIsPressed) {
-        const radius = p.sin(p.frameCount * 0.1) * 40
-        const words = ['Collaborative', 'Art', 'Ware', '2021']
-        const word = p.random(words)
-        p.text(word, p.mouseX, p.mouseY, radius, radius)
-      }
-    }
-  },
-  {
-    name: 'rectangle',
-    draw: function (p) {
-      if (p.mouseIsPressed) {
-        const radius = p.sin(p.frameCount * 0.1) * 40
-        p.rect(p.mouseX, p.mouseY, radius, radius)
-      }
-    }
-  },
-  {
-    name: 'linework',
-    draw: function (p) {
-      if (p.mouseIsPressed) {
-        const radius = p.sin(p.frameCount * 0.1) * 40
-        p.line(p.mouseX, p.mouseY, p.mouseX + radius, p.mouseY + radius)
-      }
-    }
-  }
-]
-let currBrush = defaultBrushes[0]
+let currBrush = bm.getBrush('none')
 
 const createPad = p => {
   /* local global */
@@ -79,25 +32,10 @@ const createPad = p => {
       }
       const brushStamp = p.get().canvas.toDataURL() // base64 encoding
       const newBrushButton = p.createImg(brushStamp).addClass('brushImg').id(brushName).parent(p.select('.brushesContainer'))
-      defaultBrushes.push({
-        name: brushName,
-        draw: function (p) {
-          p.loadImage(brushStamp, brushImg => {
-            if (p.mouseIsPressed) {
-              p.image(brushImg, p.mouseX, p.mouseY, 50, 50)
-            }
-          })
-        }
-      })
+      bm.addBrush(brushName, brushStamp)
 
       newBrushButton.mousePressed(() => {
-        const name = newBrushButton.id()
-        for (const b of defaultBrushes) {
-          if (b.name === name) {
-            currBrush = b
-            return
-          }
-        }
+        currBrush = bm.getBrush(newBrushButton.id())
       })
     })
 
