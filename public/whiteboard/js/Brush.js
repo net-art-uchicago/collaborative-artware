@@ -6,7 +6,6 @@ class Brush {
     this.size = 50
     this.color = '#000'
     this.p5 = p5
-    // this.p5.tint(this.color)
   }
 
   updateColor (c) {

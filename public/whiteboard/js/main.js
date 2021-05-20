@@ -34,22 +34,23 @@ window.p5Obj = new p5((p) => {
   // }
 
   p.preload = () => {
-    // Currently have a dummy id and image but we will be recieving images from the backend
-    user = { id: Number(window.prompt()), brushes: ['https://img.icons8.com/emoji/452/-emoji-sparkles.png'] }
+    // Currently have a dummy id and image but we will be receiving this from the backend
+    user = {
+      id: 1, // replace with Number(window.prompt()), for testing muliple users
+      brushes: ['https://img.icons8.com/emoji/452/-emoji-sparkles.png']
+    }
 
     users[user.id] = user
     const link = user.brushes[0]
 
     brush = new Brush(p.loadImage(link), link, p)
     brushes[link] = brush.img
-    // img = loadImage('https://media.istockphoto.com/vectors/cute-cartoon-cockatiel-couple-vector-id1160619330?b=1&k=6&m=1160619330&s=612x612&w=0&h=V6NM2xCwQ16AyIEK0prZKqm6NNjMfgZN7VUyL6HaELs=')
   }
 
   p.setup = () => {
-    // cnv = createCanvas(window.innerWidth * 0.8, window.innerHeight)
     cnv = p.createCanvas(1000, 1000)
     positionCanvas()
-    colorPicker = p.createColorPicker('#00ff00')
+    colorPicker = p.createColorPicker('#ff0000')
     colorPicker.position(0, de.scrollTop + 80)
     // default image (full white tint)
 
@@ -97,11 +98,13 @@ window.p5Obj = new p5((p) => {
     // receive event of someone else drawing
     socket.on('whiteboardMouse', async (data) => {
       if (data.brush in brushes) {
+        // if brush path has been seen, use the corresponding image
         const otherBrush = new Brush(brushes[data.brush], data.brush, p)
         otherBrush.updateColor(p.color(data.color))
         otherBrush.updateSize(data.size)
         otherBrush.draw(data.pos.x, data.pos.y)
       } else {
+        // otherwise, load image and add to object
         p.loadImage(data.brush, (otherImg) => {
           const otherBrush = new Brush(otherImg, data.brush, p)
           otherBrush.updateColor(p.color(data.color))
