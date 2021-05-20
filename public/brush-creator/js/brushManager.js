@@ -47,10 +47,15 @@ class BrushManager {
   addBrush (brushName, brushStamp) {
     this.brushes.push({
       name: brushName,
+      img: null,
       draw: function (p, x1, y1, x2, y2) {
-        p.loadImage(brushStamp, brushImg => {
-          p.image(brushImg, x1, y1, 50, 50)
-        })
+        if (this.img) p.image(this.img, x1, y1, 100, 100)
+        else {
+          p.loadImage(brushStamp, brushImg => {
+            this.img = brushImg
+            p.image(brushImg, x1, y1, 100, 100)
+          })
+        }
       }
     })
   }
@@ -67,10 +72,14 @@ class BrushManager {
   updateBrush (name, newStamp) {
     for (const b of this.brushes) {
       if (b.name === name) {
+        b.img = null
         b.draw = function (p, x1, y1, x2, y2) {
-          p.loadImage(newStamp, brushImg => {
-            p.image(brushImg, x1, y1, 100, 100)
-          })
+          if (this.img) p.image(this.img, x1, y1, 100, 100)
+          else {
+            p.loadImage(newStamp, brushImg => {
+              p.image(brushImg, x1, y1, 100, 100)
+            })
+          }
         }
       }
     }

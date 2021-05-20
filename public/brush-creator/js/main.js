@@ -21,6 +21,7 @@ const createPad = p => {
     const resetBut = p.select('#reset')
     resetBut.mousePressed(() => {
       p.clear()
+      bm.updateBrush(TEST, p.get().canvas.toDataURL())
     })
 
     const saveBut = p.select('#save')
