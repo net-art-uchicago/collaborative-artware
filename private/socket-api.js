@@ -3,35 +3,35 @@ const userToSocketId = new Map()
 module.exports = (socket, io) => {
   console.log(`user ${socket.id} has connected!`)
 
-  socket.on('newConnection', (user) => {
+  socket.on('whiteboardConnection', (user) => {
     // send all users back to the new user
     const clientIds = [...userToSocketId.entries()]
       .filter(([uid, sid]) => sid !== socket.id && uid !== user.id)
       .map(([, sid]) => sid)
-    const senderClientId = clientIds[0]// Math.floor(Math.random() * clientIds.length)]
-    socket.to(senderClientId).emit('sendExistingInfo', { socketId: socket.id })
+    const senderClientId = clientIds[Math.floor(Math.random() * clientIds.length)]
+    socket.to(senderClientId).emit('sendExistingWhiteboardInfo', { socketId: socket.id })
 
     // send new user to all existing users
-    socket.broadcast.emit('newConnection', user)
+    socket.broadcast.emit('whiteboardConnection', user)
 
     // add new user to object that olds all users
     userToSocketId.set(user.id, socket.id)
     socket.userId = user.id
   })
 
-  socket.on('getExistingInfo', (data) => {
-    socket.to(data.socketId).emit('getExistingInfo', data)
+  socket.on('getExistingWhiteboardInfo', (data) => {
+    // console.log(socket.id, 'sending to', data.socketId)
+    socket.to(data.socketId).emit('getExistingWhiteboardInfo', data)
   })
 
-  socket.on('mouse', (data) => {
-    socket.broadcast.emit('mouse', data)
+  socket.on('whiteboardMouse', (data) => {
+    socket.broadcast.emit('whiteboardMouse', data)
   })
 
   socket.on('disconnect', () => {
-    // const potentialIds = [...userToSocketId.entries()].find(([uid, sid]) => sid === socket.id)
-    // if (potentialIds !== undefined) socket.broadcast.emit('newDisconnect', potentialIds[0])
+    // console.log('deleting userId', socket.userId, 'socketId', socket.id)
     userToSocketId.delete(socket.userId)
-    socket.broadcast.emit('newDisconnect', socket.userId)
+    socket.broadcast.emit('whiteboardDisconnect', socket.userId)
 
     console.log(`Client ${socket.id} has disconnected`)
   })
