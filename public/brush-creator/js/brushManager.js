@@ -76,3 +76,5 @@ class BrushManager {
     }
   }
 }
+
+window.BrushManager = BrushManager

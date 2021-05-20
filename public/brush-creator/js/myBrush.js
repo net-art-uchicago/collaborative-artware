@@ -35,3 +35,5 @@ class MyBrush {
     this.y1 = y
   }
 }
+
+window.MyBrush = MyBrush
