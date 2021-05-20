@@ -1,5 +1,6 @@
 /* global p5 MyBrush BrushManager */
 const bm = new BrushManager()
+const P5 = p5
 const TEST = 'TESTING'
 
 const createPad = p => {
@@ -93,5 +94,5 @@ const testPad = p => {
   p.draw = () => {}
 }
 
-const create = new p5(createPad, 'create')
-const test = new p5(testPad, 'test')
+window.create = new P5(createPad, 'create')
+window.test = new P5(testPad, 'test')
