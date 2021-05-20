@@ -1,0 +1,97 @@
+<html>
+
+<head>
+    
+    <title>Avatar Maker</title>
+
+    <script>
+        window.onload = function ()
+            { 
+
+            // create file name for BODY
+            var avatarbody = new Image();
+            var avatarbodynum=Math.floor(Math.random()*6)+1; // change 3 to whatever number of body files we have
+            var avatarbodyname="body" + avatarbodynum + ".png";
+            avatarbody.src=avatarbodyname;
+
+            // create file name for EYES
+            var avatareyes= new Image();
+            var avatareyesnum=Math.floor(Math.random()*5)+1;
+            var avatareyesname="eyes" + avatareyesnum + ".png";
+            avatareyes.src=avatareyesname;
+
+            // create file name for HAIR
+            var avatarhair= new Image();
+            var avatarhairnum=Math.floor(Math.random()*2)+1;
+            var avatarhairname="hair" + avatarhairnum + ".png";
+            avatarhair.src=avatarhairname;
+
+            // create file name for MOUTH
+            var avatarmouth= new Image();
+            var avatarmouthnum=Math.floor(Math.random()*2)+1;
+            var avatarmouthname="mouth" + avatarmouthnum + ".png";
+            avatarmouth.src=avatarmouthname;
+
+            // HEAD loaded
+            avatarbody.onload=function()
+            {
+                buildavatar();
+            }
+
+            // EYES loaded
+            avatareyes.onload=function()
+            {
+                buildavatar();
+            }
+
+            // HAIR loaded
+            avatarhair.onload=function()
+            {
+                buildavatar();
+            }
+
+            // MOUTH loaded
+            avatarmouth.onload=function()
+            {
+                buildavatar();
+            }
+
+            function buildavatar()
+            {
+                // print avatar to canvas
+                var canvas=document.getElementById('canvas');
+                var ctx = canvas.getContext('2d');
+                canvas.width=400;
+                canvas.height=400;
+
+                // DRAW HEAD
+                ctx.drawImage(avatarbody,((400-avatarbody.width)/2),-30); // make sure it is centered horizontally
+
+                // DRAW HAIR
+                ctx.drawImage(avatarhair,((400-avatareyes.width)/2),-10);
+
+                // DRAW EYES
+                ctx.drawImage(avatareyes,((400-avatareyes.width)/2),-10);
+
+                // DRAW MOUTH
+                ctx.drawImage(avatarmouth,((400-avatarmouth.width)/2),-20);
+                
+
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <div>
+        <br>
+        <canvas id="canvas" style="border:5px solid #000000;"></canvas>
+        <br><br>
+        <button style="font-size: 50px; width: 25%; height: 100px;" onClick="window.location.reload();">Generate!</button>
+    </div>
+
+</body>
+
+</html>
