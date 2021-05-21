@@ -21,8 +21,8 @@ const Lab = {
     // resize
     Lab.resize()
 
-    // fill extra area with black
-    Lab.ctx.fillStyle = 'black'
+    // fill extra area with blue
+    Lab.ctx.fillStyle = 'rgba(124, 195, 201)'
     Lab.ctx.fillRect(0, 0, Lab.sizeInfo.lab[0], Lab.sizeInfo.lab[1])
 
     // center image using translate
