@@ -4,6 +4,9 @@
   --theme-color-3: #ff80ef; /* pastel magenta */
   --theme-color-4: #80b9ff; /* pastel blue */
   --theme-color-5: #89fcfc; /* new: teal */
+  --theme-color-6: #fcf2fb; /* new: light pink */
+
+  /* styling borrowed from https://github.com/jdan/98.css */
   --surface: #d6d6d6;
   --button-highlight: #ffffff;
   --button-face: #dfdfdf;
@@ -88,15 +91,6 @@ canvas {
   color: var(--theme-color-3);
 }
 
-#desktop {
-  background: linear-gradient(
-    #C09DF7,
-    var(--theme-color-5)
-  );
-  height: 100vh;
-  font-family: 'Trebuchet MS', sans-serif;
-}
-
 .desktop-button {
   box-sizing: border-box;
   border: none;
@@ -110,83 +104,31 @@ canvas {
 }
 
 .desktop-button:active {
-  box-sizing: border-box;
   outline: 1pt;
   outline-style: dotted;
   outline-offset: -5px;
-  background: var(--surface);
   box-shadow: var(--border-sunken-outer), var(--border-sunken-inner);
-  min-width: 260px;
-  min-height: 30px;
-  margin-left: 5px;
+}
+
+input[type=text], input[type=password], select {
+  width: 260px;
+  padding: 6px;
+  margin-top: 5px;
+  display: inline-block;
+  border-width: var(--border-width);
+  box-sizing: border-box;
+  box-shadow: var(--border-sunken-outer), var(--border-sunken-inner);
+}
+
+::placeholder{
   font-family: 'Trebuchet MS', sans-serif;
-  font-size: 10pt;
-}
-
-input[type=text], select {
-  width: 260px;
-  padding: 6px;
-  margin-top: 5px;
-  display: inline-block;
-  border-width: var(--border-width);
-  box-sizing: border-box;
-  box-shadow: var(--border-sunken-outer), var(--border-sunken-inner);
-}
-
-input[type=password], select {
-  width: 260px;
-  padding: 6px;
-  margin-top: 5px;
-  display: inline-block;
-  border-width: var(--border-width);
-  box-sizing: border-box;
-  box-shadow: var(--border-sunken-outer), var(--border-sunken-inner);
-}
-
-.login-header {
-  background: linear-gradient(
-    90deg,
-    var(--theme-color-3),
-    var(--theme-color-4)
-  );
-  height: 25px;
-  padding: 5px;
-}
-
-.login-footer {
-  height: 25px;
-  padding: 5px;
-}
-
-.login {
-  background-color: var(--surface);
-  width: 284px;
-  max-width: 284px;
-  height: 354px; 
-  max-height: 354px;
-  border-width: var(--border-width);
-  box-shadow: var(--border-window-outer), var(--border-window-inner);
-  background: var(--surface);
-  padding: 3px;
-  margin: 10% auto; 
-}
-
-.login-form {
-  margin-top: 15px;
-  margin-left: 5px;
-  align-items: center;  
-}
-
-.login-entry {
-  padding-top: 10px;
-  padding-left: 5px;
-  margin-bottom: 15px;
-}
-
-#footer-text {
-  font-size: 8pt;
+  color: var(--button-shadow);
 }
 
 .white-txt{
   color: white;
+}
+
+.font-10pt{
+  font-size: 10pt;
 }
