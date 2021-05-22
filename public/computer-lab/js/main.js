@@ -8,7 +8,7 @@ const Lab = {
     Lab.ctx = Lab.canvas.getContext('2d')
 
     // load  image
-    Lab.image = new Image()
+    Lab.image = new window.Image()
     Lab.image.src = './computer-lab.png'
 
     // request first frame
@@ -33,7 +33,7 @@ const Lab = {
   },
 
   resize () {
-    let dpr = window.devicePixelRatio
+    const dpr = window.devicePixelRatio
     Lab.sizeInfo = {
       ratio: dpr,
       client: [Lab.canvas.clientWidth * dpr, Lab.canvas.clientHeight * dpr],
@@ -45,7 +45,7 @@ const Lab = {
     }
 
     // calculate scale
-    let desiredScale = Math.min(Lab.sizeInfo.scale[0], Lab.sizeInfo.scale[1])
+    const desiredScale = Math.min(Lab.sizeInfo.scale[0], Lab.sizeInfo.scale[1])
 
     // update info based on calculation above
     Lab.sizeInfo.scale = [desiredScale, desiredScale]
