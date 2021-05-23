@@ -35,7 +35,7 @@ window.p5Obj = new p5((p) => {
   p.preload = () => {
     // Currently have a dummy id and images but we will be receiving this from the backend
     const userObj = {
-      id: Number(window.prompt()), // for testing muliple users
+      id: 1, // change to Number(window.prompt()), // for testing muliple users
       brushes: [
         'https://img.icons8.com/emoji/452/-emoji-sparkles.png',
         'https://img.icons8.com/doodle/344/dog.png'
