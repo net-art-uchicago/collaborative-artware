@@ -12,7 +12,7 @@ class OwnUser extends User {
     this.socket.emit('broadcastWhiteboardMouse', {
       id: this.id,
       pos: { x, y },
-      brush: this.brushPath,
+      brushPath: this.brushPath,
       size: this.brush.size,
       color: this.brush.color.toString()
     })

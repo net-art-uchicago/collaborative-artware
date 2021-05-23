@@ -41,7 +41,7 @@ class Info {
     this.socket.on('receiveWhiteboardMouse', (data) => {
       // console.log(data)
       const user = this.users.get(data.id)
-      user.updateBrush(data.brush, data.color, data.size)
+      user.updateBrush(data.brushPath, data.color, data.size)
       user.draw(data.pos.x, data.pos.y)
     })
   }
