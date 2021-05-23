@@ -10,13 +10,6 @@ class User {
     this.socket = socket
   }
 
-  // on connect, send your user to server
-  broadcast () {
-    this.socket.on('connect', () => {
-      this.socket.emit('broadcastWhiteboardUser', this.toObject())
-    })
-  }
-
   updateBrush (path, color, size) {
     // can switch brush here if path is different
     if (this.brushPath !== path) {

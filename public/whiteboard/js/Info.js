@@ -39,7 +39,6 @@ class Info {
 
     // receive event of someone else drawing
     this.socket.on('receiveWhiteboardMouse', (data) => {
-      // console.log(data)
       const user = this.users.get(data.id)
       user.updateBrush(data.brushPath, data.color, data.size)
       user.draw(data.pos.x, data.pos.y)

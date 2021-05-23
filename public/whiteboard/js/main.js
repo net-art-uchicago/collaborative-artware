@@ -77,7 +77,8 @@ window.p5Obj = new p5((p) => {
     sizeSlider.position(de.scrollLeft + 10, de.scrollTop + 10)
     saveButton.position(de.scrollLeft + 10, de.scrollTop + 40)
     colorPicker.position(de.scrollLeft + 10, de.scrollTop + 80)
-    if (!user) return
+    brushPicker.position(de.scrollLeft + 10, de.scrollTop + 120)
+
     user.updateBrush(
       brushPicker.value(),
       colorPicker.color(),
