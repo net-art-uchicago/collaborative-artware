@@ -33,11 +33,12 @@ window.p5Obj = new p5((p) => {
   // }
 
   p.preload = () => {
-    // Currently have a dummy id and image but we will be receiving this from the backend
+    // Currently have a dummy id and images but we will be receiving this from the backend
     const userObj = {
       id: Number(window.prompt()), // for testing muliple users
       brushes: [
-        'https://img.icons8.com/emoji/452/-emoji-sparkles.png'
+        'https://img.icons8.com/emoji/452/-emoji-sparkles.png',
+        'https://img.icons8.com/doodle/344/dog.png'
       ]
     }
     // connecting to socket
@@ -65,8 +66,11 @@ window.p5Obj = new p5((p) => {
     saveButton.position(0, de.scrollTop + 40)
     saveButton.mousePressed(save)
 
-    // dummy brush picker that chooses the only brush path
-    brushPicker = { value: () => user.brushPath }
+    // bare bones brush picker
+    brushPicker = p.createSelect()
+    brushPicker.position(0, de.scrollTop + 120)
+    user.brushes.forEach((_, path) => brushPicker.option(path.split('/').pop(), path))
+    brushPicker.selected(user.brushPath)
   }
 
   p.draw = () => {
