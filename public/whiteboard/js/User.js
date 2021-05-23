@@ -2,7 +2,7 @@
 class User {
   constructor (id, brushPaths, p5, socket) {
     this.id = id
-    this.brushes = new Map(brushPaths.map((link) => [link, new Brush(p5.loadImage(link), p5)]))
+    this.brushes = new Map(brushPaths.map((path) => [path, new Brush(p5.loadImage(path), p5)]))
     this.brushPath = brushPaths[0]
     this.brush = this.brushes.get(this.brushPath)
 
