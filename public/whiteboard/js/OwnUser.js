@@ -2,9 +2,7 @@
 class OwnUser extends User {
   // on connect, send your user to server
   broadcast () {
-    this.socket.on('connect', () => {
-      this.socket.emit('broadcastWhiteboardUser', this.toObject())
-    })
+    this.socket.emit('broadcastWhiteboardUser', this.toObject())
   }
 
   draw (x, y) {

@@ -1,4 +1,4 @@
-/* global p5, io, Info, OwnUser */
+/* global p5, io, UserManager, OwnUser */
 const de = document.documentElement
 
 window.p5Obj = new p5((p) => {
@@ -35,7 +35,7 @@ window.p5Obj = new p5((p) => {
   p.preload = () => {
     // Currently have a dummy id and images but we will be receiving this from the backend
     const userObj = {
-      id: 1, // change to Number(window.prompt()), // for testing muliple users
+      id: Number(window.prompt()), // for testing multiple users (change to fixed value if not testing)
       brushes: [
         'https://img.icons8.com/emoji/452/-emoji-sparkles.png',
         'https://img.icons8.com/doodle/344/dog.png'
@@ -44,7 +44,7 @@ window.p5Obj = new p5((p) => {
     // connecting to socket
     socket = io()
     user = new OwnUser(userObj.id, userObj.brushes, p, socket)
-    info = new Info(user, p, socket)
+    info = new UserManager(user, p, socket)
     user.broadcast()
     info.listen()
   }

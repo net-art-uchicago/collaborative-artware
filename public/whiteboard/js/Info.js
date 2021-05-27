@@ -1,5 +1,5 @@
 /* global User */
-class Info {
+class UserManager {
   constructor (ownUser, p5, socket) {
     this.users = new Map([[ownUser.id, ownUser]])
     this.p5 = p5
@@ -46,4 +46,4 @@ class Info {
   }
 }
 
-window.Info = Info
+window.UserManager = UserManager
