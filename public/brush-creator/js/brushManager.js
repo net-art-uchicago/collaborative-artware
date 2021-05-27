@@ -9,6 +9,7 @@ class BrushManager {
       {
         name: 'none',
         draw: function (p, x1, y1, x2, y2) {
+          p.stroke('white')
           p.line(x1, y1, x2, y2)
         }
       },
@@ -16,6 +17,7 @@ class BrushManager {
         name: 'ellipse',
         draw: function (p, x1, y1, x2, y2) {
           const radius = p.sin(p.frameCount * 0.1) * 40
+          p.stroke('white')
           p.ellipse(x1, y1, radius, radius)
         }
       },
@@ -25,6 +27,7 @@ class BrushManager {
           const radius = p.sin(p.frameCount * 0.1) * 40
           const words = ['Collaborative', 'Art', 'Ware', '2021']
           const word = p.random(words)
+          p.stroke('white')
           p.text(word, x1, y1, radius, radius)
         }
       },
@@ -32,6 +35,7 @@ class BrushManager {
         name: 'rectangle',
         draw: function (p, x1, y1, x2, y2) {
           const radius = p.sin(p.frameCount * 0.1) * 40
+          p.stroke('white')
           p.rect(x1, y1, radius, radius)
         }
       },
@@ -39,6 +43,7 @@ class BrushManager {
         name: 'linework',
         draw: function (p, x1, y1, x2, y2) {
           const radius = p.sin(p.frameCount * 0.1) * 40
+          p.stroke('white')
           p.line(x1, y1, x1 + radius, y1 + radius)
         }
       }]

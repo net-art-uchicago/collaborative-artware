@@ -25,6 +25,10 @@ body {
     border: 2px solid purple;
 }
 
+canvas{
+    background: black;
+}
+
 /* .drawingPad{
     border: 2px solid salmon;
     margin: 3px;
