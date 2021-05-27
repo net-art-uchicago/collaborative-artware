@@ -1,51 +1,109 @@
-const { urlencoded } = require("express")
-
-/* global YTSampler */
-const yts = new YTSampler()
-const field = document.querySelector('input')
-const btn = document.querySelector('button')
-
-btn.addEventListener('click', () => {
-  if (urlencoded.value === '') window.alert('missing YouTube URL')
-  else {
-    yts.loadVideo(url.value)
-    url.placeholder = '...loading....'
-    url.value = ''
+class YTelements extends window.HTMLElement {
+  constructor () {
+      super()
+      this.player = null
   }
-})
-
-/*
-let sound
-let dropdown
-let tag
-let hashmap
-
-function setup () {
-  createCanvas(window.innerWidth, window.innerHeight)
-  dropdown = createSelect()
-  hashmap.forEach((_, name) => {
-    dropdown.option(name)
+  //YTSamplerElement
+  connectedCallback () {
+      this.innerHTML = `
+      <style>
+          .yt-sampler {
+              background-color: pink;
+              padding: 10px;
+              wideth: 479px;
+              margin: 5px 0px;
+          }
+      </style>
+      <section class="yt-sampler">
+          <input type="text" placeholder="YouTube URL">
+              <button>load</button>
+      </section>
+  `
+  const btn = this.querySelector('button')
+  const url = this.querySelector('input').value
+  btn.addEventListener('click', () => {
+      this.loadVideo(url.value)
   })
-  dropdown.changed(newSelection)
+  }
+_videoReady() {
+    const url = this.querySelector('input')
+    url.placerholder = 'YouTube URL'
+    url.value = ''
+    this._createToggle()
+}
+_createToggle () {
+  // creates a play/pause button
+  const toggle = this.querySelector('.yt-toggle-button')
+  if(toggle) return 
+  // if element doesn't exist then we do the following
+  const sec = this.querySelector('.yt-sampler')
+  const btn = document.createElement('button')
+  btn.className = 'yt-toggle-button'
+  btn.textContent = 'play'
+  btn.addEventListener('click', () => {
+      if(btn.textContent === 'play') {
+          this.play()
+          btn.textContent = 'pause'
+      } else {
+          this.pause()
+          btn.textContent = 'play'
+      }
+  })
+  sec.appendChild(btn)
 }
 
-function newSelection () {
-  hashmap.get(dropdown.value()).play()
+_playerLoaded (e) {
+    console.log('ready', e)
+    this._videoReady()
 }
-function preload () {
-  // if dropdown option is equal to the sound option then assign that value
-  // create the hashmap that has the mp3 file name and then
-  hashmap = ['./js/mp3s/gloomy.mp3', './js/mp3s/pig.mp3'].reduce((h, audio) => {
-    const path = audio.split('/')
-    const name = path[path.length - 1].split('.')[0]
-    h.set(name, loadSound(audio))
-    return h
-  }, new Map())
+_stateChange (e) {
+    console.log('state changed', e)
+    if(e.data === 5) this._videoReady()
 }
-function draw () {
-
-  // if (mouseIsPressed) {
-  //   image(tag, mouseX, mouseY, 50, 50)
-  // }
+_newPlayer (vidId) {
+    //const ele = this.createIframeDiv()
+    const div = document.createElement('div')
+    div.id = 'player' + Math.random()
+    div.style.display = 'none'
+    document.body.appendChild(div)
+    this.player = new YT.Player(div.id, {
+      videoId: vidId,
+      events: {
+        onReady: (e) => this._playerLoaded(e),
+        onStateChange: (e) => this._stateChange(e),
+      }
+})
 }
-*/
+_updatePlayer (vidId) {
+    this.player.cueVideoById(vidId)
+}
+// Modified from https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
+_idFromUrl (url) {
+    let video_id = url.split('v=')[1]
+    var ampersandPosition = video_id.indexOf('&')
+    if(ampersandPosition != -1) {
+        videoId = video_id.substring(0, ampersandPosition)
+      }
+    return videoId
+}
+loadVideo (url) {
+    if(url === '') return window.alert('missing Youtube Url')
+    const vidId = this._idFromUrl(url)
+    const urlField = this.querySelector('input')
+    urlField.placeholder = '...loading...'
+    urlField.value = ''
+    const toggle = this.querySelector('.yt-toggle-button')
+    if(toggle) toggle.remove()
+    if (!this.player) this._newPlayer(vidId)
+    else this._updatePlayer(vidId)
+}
+  play () {
+      this.player.playVideo()
+  }
+  pause () {
+      this.player.pauseVideo()
+  }
+  stop () {
+      this.player.stopVideo()
+  }
+window.customElements.define('yt-sampler', YTelements)
