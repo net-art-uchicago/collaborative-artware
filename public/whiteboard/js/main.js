@@ -1,18 +1,15 @@
-/* global */
+/* global p5, io, UserManager, OwnUser */
 const de = document.documentElement
 
 window.p5Obj = new p5((p) => {
-  let img
-  let brush
   let cnv
   let colorPicker
   let sizeSlider
+  let brushPicker
   let saveButton
-
-  /* Socket info to send;
-      mouse position
-      current canvas (as png? encoded 64bit?)
-      */
+  let socket
+  let user
+  let info
 
   function positionCanvas () {
     const x = 150
@@ -36,17 +33,24 @@ window.p5Obj = new p5((p) => {
   // }
 
   p.preload = () => {
-    img = p.loadImage('https://img.icons8.com/emoji/452/-emoji-sparkles.png')
-    // Currently have a dummy image but we will be recieving images from the backend
-    // img = loadImage('https://media.istockphoto.com/vectors/cute-cartoon-cockatiel-couple-vector-id1160619330?b=1&k=6&m=1160619330&s=612x612&w=0&h=V6NM2xCwQ16AyIEK0prZKqm6NNjMfgZN7VUyL6HaELs=')
+    // Currently have a dummy id and images but we will be receiving this from the backend
+    const userObj = {
+      id: Number(window.prompt()), // for testing multiple users (change to fixed value if not testing)
+      brushes: [
+        'https://img.icons8.com/emoji/452/-emoji-sparkles.png',
+        'https://img.icons8.com/doodle/344/dog.png'
+      ]
+    }
+    // connecting to socket
+    socket = io()
+    user = new OwnUser(userObj.id, userObj.brushes, p, socket)
+    info = new UserManager(user, p, socket)
+    user.broadcast()
+    info.listen()
   }
 
   p.setup = () => {
-    // cnv = createCanvas(window.innerWidth * 0.8, window.innerHeight)
     cnv = p.createCanvas(1000, 1000)
-    p.preload()
-    brush = new Brush(img, p)
-    p.background('white')
     positionCanvas()
     colorPicker = p.createColorPicker('#ff0000')
     colorPicker.position(0, de.scrollTop + 80)
@@ -61,22 +65,27 @@ window.p5Obj = new p5((p) => {
     saveButton = p.createButton('save canvas')
     saveButton.position(0, de.scrollTop + 40)
     saveButton.mousePressed(save)
+
+    // bare bones brush picker
+    brushPicker = p.createSelect()
+    brushPicker.position(0, de.scrollTop + 120)
+    user.brushes.forEach((_, path) => brushPicker.option(path.split('/').pop(), path))
+    brushPicker.selected(user.brushPath)
   }
 
   p.draw = () => {
     sizeSlider.position(de.scrollLeft + 10, de.scrollTop + 10)
     saveButton.position(de.scrollLeft + 10, de.scrollTop + 40)
     colorPicker.position(de.scrollLeft + 10, de.scrollTop + 80)
-    if (!brush) return
-    if (brush.color !== colorPicker.color()) {
-      brush.updateColor(colorPicker.color())
-    }
-    if (brush.size !== sizeSlider.value()) {
-      brush.updateSize(sizeSlider.value())
-    }
+    brushPicker.position(de.scrollLeft + 10, de.scrollTop + 120)
+
+    user.updateBrush(
+      brushPicker.value(),
+      colorPicker.color(),
+      sizeSlider.value()
+    )
     if (p.mouseIsPressed) {
-      // sets brush to bSize and centered at mouse
-      brush.draw(p.mouseX, p.mouseY)
+      user.draw(p.mouseX, p.mouseY)
     }
   }
 })
