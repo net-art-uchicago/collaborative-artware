@@ -1,4 +1,20 @@
-/* global createCanvas, createSelect, loadSound */
+const { urlencoded } = require("express")
+
+/* global YTSampler */
+const yts = new YTSampler()
+const field = document.querySelector('input')
+const btn = document.querySelector('button')
+
+btn.addEventListener('click', () => {
+  if (urlencoded.value === '') window.alert('missing YouTube URL')
+  else {
+    yts.loadVideo(url.value)
+    url.placeholder = '...loading....'
+    url.value = ''
+  }
+})
+
+/*
 let sound
 let dropdown
 let tag
@@ -32,4 +48,4 @@ function draw () {
   //   image(tag, mouseX, mouseY, 50, 50)
   // }
 }
-
+*/
