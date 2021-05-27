@@ -24,7 +24,6 @@ async function getUser (username) {
       const jsonPath = path.join(userPath, file + '.json')
       const json = fs.readFileSync(jsonPath, 'utf8')
       const user = JSON.parse(json)
-      console.log(user.username)
       if (user.username === username) {
         foundUser = user
         break
@@ -39,7 +38,6 @@ router.post('/api/login', async (req, res) => {
   const user = await getUser(req.body.username)
   if (!user) return res.json({ error: 'user not found' })
 
-  // const valid = req.body.password === foundUser.password
   const valid = await bcrypt.compare(req.body.password, user.password)
   if (!valid) return res.json({ error: 'wrong password' })
 
