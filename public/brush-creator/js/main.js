@@ -3,22 +3,22 @@ const bm = new BrushManager()
 const P5 = p5
 const TEST = 'TESTING'
 
-// function brushPostReq (brushStamp, brushname) {
-//   const opts = {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json, text/plain, */*',
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//       brush: brushStamp,
-//       name: brushname
-//     })
-//   }
+function brushPostReq (brushStamp, brushname) {
+  const opts = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      brush: brushStamp,
+      name: brushname
+    })
+  }
 
-//   window.fetch('api/newbrush', opts)
-//     .then((res) => res.json())
-// }
+  window.fetch('api/newbrush', opts)
+    .then((res) => res.json())
+}
 
 const createPad = p => {
   /* local global */
@@ -41,7 +41,7 @@ const createPad = p => {
   p.setup = () => {
     createBrush = new MyBrush(p, bm.getBrushDraw('none'))
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2).id('createCanvas')
-    // p.fetchBrushes()
+    p.fetchBrushes()
     const premadeButs = p.selectAll('.premade')
     premadeButs.forEach((premade) => {
       premade.mousePressed(() => {
@@ -68,7 +68,7 @@ const createPad = p => {
       newBrushButton.mousePressed(() => {
         createBrush.updateShape(bm.getBrushDraw(newBrushButton.id()))
       })
-      // brushPostReq(brushStamp, brushName)
+      brushPostReq(brushStamp, brushName)
     })
   }
 
