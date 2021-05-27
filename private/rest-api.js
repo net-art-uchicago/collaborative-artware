@@ -1,4 +1,5 @@
 const express = require('express')
+const bcrypt = require('bcryptjs')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const bcrypt = require('bcryptjs')
@@ -50,5 +51,12 @@ router.post('/api/login', async (req, res) => {
     httpOnly: true
   }).json({ message: 'access granted' })
 })
+
+/* Function to hash passwords */
+async function main (pwd) {
+    const salt = await bcrypt.genSalt(10)
+    const hashedPwd = await bcrypt.hash(pwd, salt)
+    return hashedPwd
+}
 
 module.exports = router
