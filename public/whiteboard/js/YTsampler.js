@@ -10,8 +10,11 @@ class YTSampler extends window.HTMLElement {
     this.innerHTML = `
       <style>
           .yt-sampler {
-              padding: 10px;
-              margin: 5px 0px;
+              margin: 5px 0px;  
+          }
+          .yt-sampler input {
+            box-sizing: border-box;
+            width: 100% 
           }
       </style>
       <section class="yt-sampler">
