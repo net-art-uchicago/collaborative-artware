@@ -28,7 +28,7 @@ class YTSampler extends window.HTMLElement {
 
   _videoReady () {
     const url = this.querySelector('input')
-    url.placerholder = 'YouTube URL'
+    url.placeholder = 'YouTube URL'
     url.value = ''
     console.log(url)
     this._createToggle()
@@ -99,6 +99,7 @@ class YTSampler extends window.HTMLElement {
     if (url === '') return window.alert('missing Youtube Url')
     const vidId = this._idFromUrl(url)
     const urlField = this.querySelector('input')
+    console.log(urlField)
     urlField.placeholder = '...loading...'
     urlField.value = ''
     const toggle = this.querySelector('.yt-toggle-button')
