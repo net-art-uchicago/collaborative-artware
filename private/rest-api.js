@@ -1,5 +1,5 @@
 const express = require('express')
-const bcrypt = require('bcryptjs')
+// const bcrypt = require('bcryptjs')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const bcrypt = require('bcryptjs')
