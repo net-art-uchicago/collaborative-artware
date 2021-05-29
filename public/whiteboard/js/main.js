@@ -17,20 +17,9 @@ window.p5Obj = new p5((p) => {
     cnv.position(x, y)
   }
 
-  // function windowResized () {
-  //   positionCanvas()
-  // }
-
   function save () {
     p.saveCanvas(cnv, 'artware', 'jpg')
   }
-
-  // function brushSize (brushSizeVal) {
-  //   var slider = document.getElementById("sizeSlider");
-  //   //max brush size * percent based on slider val
-  //   bSize = 100 * brushSizeVal * 0.01
-  //   slider.innerHTML = brushSizeVal + "px"
-  // }
 
   p.preload = () => {
     // Currently have a dummy id and images but we will be receiving this from the backend
