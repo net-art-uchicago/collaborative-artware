@@ -3,6 +3,32 @@
   --theme-color-2: rgba(255, 255, 255, 0.75); /* transparent white */
   --theme-color-3: #ff80ef; /* pastel magenta */
   --theme-color-4: #80b9ff; /* pastel blue */
+  --theme-color-5: #89fcfc; /* new: teal */
+  --theme-color-6: #fcf2fb; /* new: light pink */
+
+  /* styling borrowed from https://github.com/jdan/98.css */
+  --surface: #d6d6d6;
+  --button-highlight: #ffffff;
+  --button-face: #dfdfdf;
+  --button-shadow: #808080;
+  --window-frame: #0a0a0a;
+
+    /* Borders */
+  --border-width: 1px;
+  --border-raised-outer: inset -1px -1px var(--window-frame),
+    inset 1px 1px var(--button-highlight);
+  --border-raised-inner: inset -2px -2px var(--button-shadow),
+    inset 2px 2px var(--button-face);
+  --border-sunken-outer: inset -1px -1px var(--button-highlight),
+    inset 1px 1px var(--window-frame);
+  --border-sunken-inner: inset -2px -2px var(--button-face),
+    inset 2px 2px var(--button-shadow);
+
+  /* Window borders flip button-face and button-highlight */
+  --border-window-outer: inset -1px -1px var(--window-frame),
+    inset 1px 1px var(--button-face);
+  --border-window-inner: inset -2px -2px var(--button-shadow),
+    inset 2px 2px var(--button-highlight);
 }
 
 * {
@@ -19,7 +45,6 @@ canvas {
   top: 0px;
   left: 0px;
 }
-
 
 #menu {
   display: flex;
@@ -64,4 +89,46 @@ canvas {
 
 .submenu-option.selected {
   color: var(--theme-color-3);
+}
+
+.desktop-button {
+  box-sizing: border-box;
+  border: none;
+  background: var(--surface);
+  box-shadow: var(--border-raised-outer), var(--border-raised-inner);
+  min-width: 260px;
+  min-height: 30px;
+  margin-left: 5px;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 10pt;
+}
+
+.desktop-button:active {
+  outline: 1pt;
+  outline-style: dotted;
+  outline-offset: -5px;
+  box-shadow: var(--border-sunken-outer), var(--border-sunken-inner);
+}
+
+input[type=text], input[type=password], select {
+  width: 260px;
+  padding: 6px;
+  margin-top: 5px;
+  display: inline-block;
+  border-width: var(--border-width);
+  box-sizing: border-box;
+  box-shadow: var(--border-sunken-outer), var(--border-sunken-inner);
+}
+
+::placeholder{
+  font-family: 'Trebuchet MS', sans-serif;
+  color: var(--button-shadow);
+}
+
+.white-txt{
+  color: white;
+}
+
+.font-10pt{
+  font-size: 10pt;
 }

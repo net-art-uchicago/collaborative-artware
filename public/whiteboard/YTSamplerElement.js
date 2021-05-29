@@ -73,7 +73,6 @@ class YTSamplerElement extends window.HTMLElement {
           onReady: (e) => this._playerLoaded(e),
           onStateChange: (e) => this._stateChange(e),
         }
-      //this._createYTPlayer(ele.id,vid) 
   })
 }
   _updatePlayer (vidId) {

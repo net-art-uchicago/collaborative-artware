@@ -1,0 +1,67 @@
+body {
+    display: flex;
+    flex-direction: column;
+    border:3px solid red;
+}
+.appContainer{
+    display: flex;
+    border:1px solid burlywood;
+}
+
+.leftContainer{
+    display: flex;
+    flex-direction: column;
+    border:1px solid grey;
+}
+
+.rightContainer{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid blueviolet
+}
+.canvasContainer {
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid purple;
+}
+
+/* .drawingPad{
+    border: 2px solid salmon;
+    margin: 3px;
+} */
+
+.settingsContainer {
+    display: flex;
+    justify-content: space-evenly;
+    border: 2px solid blue;
+    margin: 3px;
+}
+.brushesContainer {
+    display: flex;
+    /* flex-direction: column; */
+    border:3px solid orange;
+    margin: 1px;
+}
+
+.defaultBrushes {
+    display: flex;
+    /* flex-direction: column; */
+    border:3px solid green;
+}
+
+.premade {
+    margin: 3px;
+}
+
+.brushImg {
+    border: 2px solid black;
+    height: 50px;
+    width: auto;
+    cursor: pointer;
+    margin: 2px;
+}
+canvas {
+    position: relative;
+    border: 2px solid black;
+    margin: 20px;
+}
