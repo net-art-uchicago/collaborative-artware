@@ -71,12 +71,11 @@ window.p5Obj = new p5((p) => {
     brushPicker.position(0, de.scrollTop + 120)
     user.brushes.forEach((_, path) => brushPicker.option(path.split('/').pop(), path))
     brushPicker.selected(user.brushPath)
+
     // adding YouTube API Frame and Sound.js
-    const youTube = p.createElement('section', '<yt-sampler></yt-sampler>')
+    const youTube = p.createElement('yt-sampler')
     youTube.position(0, de.scrollTop + 160)
     youTube.style('width', '120px')
-    // youTube.innerHTML = `<yt-sampler></yt-sampler>
-    // `
   }
 
   p.draw = () => {

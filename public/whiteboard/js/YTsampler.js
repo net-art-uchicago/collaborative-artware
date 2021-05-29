@@ -30,7 +30,6 @@ class YTSampler extends window.HTMLElement {
     const url = this.querySelector('input')
     url.placeholder = 'YouTube URL'
     url.value = ''
-    console.log(url)
     this._createToggle()
   }
 
@@ -56,12 +55,10 @@ class YTSampler extends window.HTMLElement {
   }
 
   _playerLoaded (e) {
-    console.log('ready', e)
     this._videoReady()
   }
 
   _stateChange (e) {
-    console.log('state changed', e)
     if (e.data === 5) this._videoReady()
   }
 
@@ -86,7 +83,6 @@ class YTSampler extends window.HTMLElement {
 
   // Modified from https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
   _idFromUrl (url) {
-    console.log(url)
     let videoId = url.split('v=')[1]
     const ampersandPosition = videoId.indexOf('&')
     if (ampersandPosition !== -1) {
@@ -99,7 +95,6 @@ class YTSampler extends window.HTMLElement {
     if (url === '') return window.alert('missing Youtube Url')
     const vidId = this._idFromUrl(url)
     const urlField = this.querySelector('input')
-    console.log(urlField)
     urlField.placeholder = '...loading...'
     urlField.value = ''
     const toggle = this.querySelector('.yt-toggle-button')
