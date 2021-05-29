@@ -17,20 +17,9 @@ window.p5Obj = new p5((p) => {
     cnv.position(x, y)
   }
 
-  // function windowResized () {
-  //   positionCanvas()
-  // }
-
   function save () {
     p.saveCanvas(cnv, 'artware', 'jpg')
   }
-
-  // function brushSize (brushSizeVal) {
-  //   var slider = document.getElementById("sizeSlider");
-  //   //max brush size * percent based on slider val
-  //   bSize = 100 * brushSizeVal * 0.01
-  //   slider.innerHTML = brushSizeVal + "px"
-  // }
 
   p.preload = () => {
     // Currently have a dummy id and images but we will be receiving this from the backend
@@ -52,25 +41,36 @@ window.p5Obj = new p5((p) => {
   p.setup = () => {
     cnv = p.createCanvas(1000, 1000)
     positionCanvas()
-    colorPicker = p.createColorPicker('#ff0000')
+    //if we want solid bg, bit it's kinda nice transparent
+    // p.background('white')
+
+    // create color picker
+    colorPicker = p.createColorPicker('#000')
     colorPicker.position(0, de.scrollTop + 80)
-    // default image (full white tint)
+    colorPicker.id('colorPicker')
+    colorPicker.parent('tools')
 
     // create size slider
-    sizeSlider = p.createSlider(0, 100, 50)
+    sizeSlider = p.createSlider(5, 100, 50)
     sizeSlider.position(0, de.scrollTop)
     sizeSlider.style('width', '120px')
+    sizeSlider.id('sizeSlider')
+    sizeSlider.parent('tools')
 
     // create save button
     saveButton = p.createButton('save canvas')
-    saveButton.position(0, de.scrollTop + 40)
+    saveButton.position(0, de.scrollTop)
     saveButton.mousePressed(save)
+    saveButton.id('saveButton')
+    saveButton.parent('tools')
 
     // bare bones brush picker
     brushPicker = p.createSelect()
     brushPicker.position(0, de.scrollTop + 120)
     user.brushes.forEach((_, path) => brushPicker.option(path.split('/').pop(), path))
     brushPicker.selected(user.brushPath)
+    brushPicker.id('brushPicker')
+    brushPicker.parent('tools')
 
     // adding YouTube API Frame and Sound.js
     const youTube = p.createElement('yt-sampler')
@@ -79,11 +79,6 @@ window.p5Obj = new p5((p) => {
   }
 
   p.draw = () => {
-    sizeSlider.position(de.scrollLeft + 10, de.scrollTop + 10)
-    saveButton.position(de.scrollLeft + 10, de.scrollTop + 40)
-    colorPicker.position(de.scrollLeft + 10, de.scrollTop + 80)
-    brushPicker.position(de.scrollLeft + 10, de.scrollTop + 120)
-
     user.updateBrush(
       brushPicker.value(),
       colorPicker.color(),

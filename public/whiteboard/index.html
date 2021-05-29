@@ -10,16 +10,18 @@
     <!-- TODO: favicon -->
     <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="../css/draggable.css">
   </head>
   <body>
-    <!-- <input type="range" min="5" max="100" step="1" value="50"
-    onchange="brushSize(this.value)">
-    <div id="sizeSlider">50px</div>
-    <button id="saveButton" type="button">save canvas</button> -->
-    <!-- <img src = "https://images-cdn.9gag.com/photo/aDW7w2B_700b.jpg" >  -->
+
+    <div id="tools" class="tools-draggable">
+      <div class="tools-header">
+        <span class="white-txt">Toolbox</span>
+      </div>
+    </div>
     <script src="../js/libs/p5.min.js"></script>
+    <script src="../js/utils/draggable.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="js/YTSampler.js" ></script>
