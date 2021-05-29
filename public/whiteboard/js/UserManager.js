@@ -13,7 +13,8 @@ class UserManager {
 
   toObject () {
     const existingUsers = Array.from(this.users.values(), (user) => user.toObject())
-    return { existingUsers }
+    const canvas64 = this.p5.canvas.toDataURL()
+    return { canvas64, existingUsers }
   }
 
   listen () {
@@ -33,7 +34,10 @@ class UserManager {
     })
 
     // receive info for existing users, which you will only do if you just joined
-    this.socket.on('receiveExistingWhiteboardInfo', ({ existingUsers }) => {
+    this.socket.on('receiveExistingWhiteboardInfo', ({ canvas64, existingUsers }) => {
+      const style = this.p5.canvas.style
+      this.p5.loadImage(canvas64, (img) =>
+        this.p5.image(img, 0, 0, parseInt(style.width, 10), parseInt(style.height, 10)))
       existingUsers.forEach(this.addUser.bind(this))
     })
 
