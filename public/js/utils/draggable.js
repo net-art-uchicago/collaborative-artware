@@ -6,8 +6,8 @@
 function grab (event) {
   const ele = event.target
   if (!ele.className.includes('draggable')) return
-  const left = parseInt(ele.style.left) || 0
-  const top = parseInt(ele.style.top) || 0
+  const left = parseInt(ele.style.left) || ele.offsetLeft
+  const top = parseInt(ele.style.top) || ele.offsetTop
   ele.dataset.offsetX = event.clientX - left
   ele.dataset.offsetY = event.clientY - top
   window.dragging = ele
