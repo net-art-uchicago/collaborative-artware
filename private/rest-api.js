@@ -12,6 +12,7 @@ const JWT_SECRET = 'hellothisisasecret'
 router.use(bodyParser.json())
 router.use(cookieParser())
 
+/* Find User JSON File */
 async function getUser (username) {
   const dbPath = path.join(__dirname, 'user_data')
   let foundUser
@@ -33,7 +34,65 @@ async function getUser (username) {
   return foundUser
 }
 
-/* Login POST/GET */
+/* POST new brush endpoint */
+router.get('/brush-creator/api/brushdata', async (req, res) => {
+  const token = req.cookies.AccessToken
+  if (!token) return res.json({ error: 'no access token, user not logged in' })
+
+  const valid = await jwt.verify(token, JWT_SECRET)
+  if (!valid) return res.json({ error: 'not a valid token' })
+
+  const user = await getUser(valid.username)
+  if (!user) return res.json({ error: 'user not found' })
+
+  return res.json(user.brushes)
+})
+
+/* POST new brush endpoint */
+router.post('/brush-creator/api/newbrush', async (req, res) => {
+  const token = req.cookies.AccessToken
+  if (!token) return res.json({ error: 'no access token, user not logged in' })
+
+  const valid = await jwt.verify(token, JWT_SECRET)
+  if (!valid) return res.json({ error: 'not a valid token' })
+
+  const user = await getUser(valid.username)
+  if (!user) return res.json({ error: 'user not found' })
+
+  const brushData = req.body.brush
+  const brushName = req.body.name
+
+  if (brushName in user.brushes) {
+    console.log('error: brush name taken')
+    res.json({ message: 'error: brush name taken' })
+  }
+
+  const path = 'private/user_images/' + user.id + '/brushes/' + brushName + '.png'
+  user.brushes.push({ name: brushName, brush: brushData, path: path })
+
+  fs.writeFile('private/user_data/' + user.id + '/' + user.id + '.json', JSON.stringify(user), function (err) {
+    if (err) {
+      console.log(err)
+      res.json({ message: 'error: updating user json' })
+    }
+  })
+
+  // strip off the data: url prefix to get just the base64-encoded bytes
+  const data = brushData.replace(/^data:image\/\w+;base64,/, '')
+  const buf = Buffer.from(data, 'base64')
+
+  fs.writeFile(path, buf, function (err) {
+    if (err) {
+      console.log(err)
+      res.json({ message: 'error: could not save brush' })
+    } else {
+      console.log('saved brush')
+      res.json({ message: 'saved brush' })
+    }
+  })
+})
+
+/* POST login endpoint */
 router.post('/api/login', async (req, res) => {
   const user = await getUser(req.body.username)
   if (!user) return res.json({ error: 'user not found' })

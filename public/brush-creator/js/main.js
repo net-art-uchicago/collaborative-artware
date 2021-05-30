@@ -3,17 +3,50 @@ const bm = new BrushManager()
 const P5 = p5
 const TEST = 'TESTING'
 
+function brushPostReq (brushStamp, brushname) {
+  const opts = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      brush: brushStamp,
+      name: brushname
+    })
+  }
+  window.fetch('api/newbrush', opts)
+    .then((res) => res.json())
+    .then((json) => console.log(json))
+}
+
 const createPad = p => {
   /* local global */
   let createBrush
 
+  p.fetchBrushes = () => {
+    window.fetch('api/brushdata')
+      .then((res) => res.json())
+      .then((json) => {
+        json.forEach((b) => {
+          const newBrushButton = p.createButton(b.name).addClass('premade').id(b.name).parent(p.select('.brushesContainer'))
+          bm.addBrush(b.name, b.brush)
+          newBrushButton.mousePressed(() => {
+            createBrush.updateShape(bm.getBrushDraw(newBrushButton.id()))
+            console.log(newBrushButton.id())
+          })
+        })
+      })
+  }
+
   p.setup = () => {
     createBrush = new MyBrush(p, bm.getBrushDraw('none'))
-    p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-
+    p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2).id('createCanvas')
+    p.fetchBrushes()
     const premadeButs = p.selectAll('.premade')
     premadeButs.forEach((premade) => {
       premade.mousePressed(() => {
+        console.log(premade.id())
         createBrush.updateShape(bm.getBrushDraw(premade.id()))
       })
     })
@@ -32,11 +65,12 @@ const createPad = p => {
         return
       }
       const brushStamp = p.get().canvas.toDataURL() // base64 encoding
-      const newBrushButton = p.createImg(brushStamp).addClass('brushImg').id(brushName).parent(p.select('.brushesContainer'))
+      const newBrushButton = p.createButton(brushName).addClass('premade').id(brushName).parent(p.select('.brushesContainer'))
       bm.addBrush(brushName, brushStamp)
       newBrushButton.mousePressed(() => {
         createBrush.updateShape(bm.getBrushDraw(newBrushButton.id()))
       })
+      brushPostReq(brushStamp, brushName)
     })
   }
 
@@ -67,16 +101,16 @@ const testPad = p => {
   p.setup = () => {
     const clearBut = p.select('#clear')
     clearBut.mousePressed(() => {
-      p.background(225)
+      p.background(100)
     })
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    p.background(225)
+    p.background(100)
     testBrush = new MyBrush(p, bm.getBrushDraw(TEST))
   }
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowHeight / 2, p.windowHeight / 2)
-    p.background(225)
+    p.background(100)
   }
 
   p.mousePressed = () => {
