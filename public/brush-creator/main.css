@@ -40,8 +40,8 @@ body {
   );
   height: 100vh;
   font-family: 'Trebuchet MS', sans-serif;
-};
 }
+
 .appContainer{
 
     display: flex;
