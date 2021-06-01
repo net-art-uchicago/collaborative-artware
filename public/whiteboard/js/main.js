@@ -1,6 +1,6 @@
+
 /* global p5, io, UserManager, OwnUser */
 const de = document.documentElement
-
 window.p5Obj = new p5((p) => {
   let cnv
   let colorPicker
@@ -41,7 +41,7 @@ window.p5Obj = new p5((p) => {
   p.setup = () => {
     cnv = p.createCanvas(1000, 1000)
     positionCanvas()
-    //if we want solid bg, bit it's kinda nice transparent
+    // if we want solid bg, bit it's kinda nice transparent
     // p.background('white')
 
     // create color picker
@@ -71,10 +71,15 @@ window.p5Obj = new p5((p) => {
     brushPicker.selected(user.brushPath)
     brushPicker.id('brushPicker')
     brushPicker.parent('tools')
+
+    // adding YouTube API Frame and Sound.js
+    const youTube = p.createElement('yt-sampler')
+    youTube.position(0, de.scrollTop)
+    youTube.id('youTubeSampler')
+    youTube.parent('tools')
   }
 
   p.draw = () => {
-
     user.updateBrush(
       brushPicker.value(),
       colorPicker.color(),

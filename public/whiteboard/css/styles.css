@@ -14,6 +14,12 @@
   margin: 60px 0px 0px 15px;
 }
 
+#youTubeSampler {
+  margin: 250px 0px 0px 5px;
+  width: 140px;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
 #colorPicker {
   margin: 30px 0px 0px 50px;
 }
@@ -33,7 +39,7 @@
 
 #tools {
   width: 150px;
-  height: 250px;
+  height: 320px;
   z-index: 100;
   position: fixed;
   top: 20px;
@@ -52,8 +58,3 @@ body {
     );
   height: 1000px; 
 }
-
-/* input[type=range]{
-  -webkit-appearance: none;
-} */
-
