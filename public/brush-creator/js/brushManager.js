@@ -86,6 +86,7 @@ class BrushManager {
           if (this.img) p.image(this.img, x1, y1, 100, 100)
           else {
             p.loadImage(newStamp, brushImg => {
+              this.img = brushImg
               p.image(brushImg, x1, y1, 100, 100)
             })
           }
