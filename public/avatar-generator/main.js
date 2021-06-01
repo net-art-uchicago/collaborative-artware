@@ -1,3 +1,5 @@
+/* global Image */ 
+
 // Run the code as soon as the window loads
 window.onload = function () {
   // Add section of code for each body part to generate a random image file name
