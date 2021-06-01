@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const bcrypt = require ('bcryptjs')
 const jwt = require('jsonwebtoken')
 const path = require('path')
 var fs = require('fs')
@@ -51,10 +52,32 @@ router.post('/api/login', async (req, res) => {
 })
 
 /* Function to hash passwords */
-async function main (pwd) {
+async function hash (pwd) {
     const salt = await bcrypt.genSalt(10)
     const hashedPwd = await bcrypt.hash(pwd, salt)
     return hashedPwd
 }
+
+/* Create a new user */
+async function createUser (id, display_name, user, pass, head, eyes, hair) {
+    const userDict = {"id" : id,
+                    "display_name" : display_name,
+                    "username" : user,
+                    "password" : await hash(pass),
+                    "avatar" : {"head" : head, "eyes" : eyes, "hair" : hair}}
+    const userJson = JSON.stringify(userDict)
+    const userDir = "./user_data/" + id
+
+    // create new directory
+    fs.mkdir(userDir, (err) => {
+      if (err) throw err
+    })
+    const userPath = userDir + "/" + id + ".json"
+    fs.writeFile(userPath, userJson, function(err, result) {
+        if(err) console.log("error", err)
+    })
+}
+
+createUser("3", "ted", "ddd", "password", 1, 2, 3)
 
 module.exports = router
