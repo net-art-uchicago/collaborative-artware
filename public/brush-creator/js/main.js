@@ -20,33 +20,28 @@ function brushPostReq (brushStamp, brushname) {
     .then((json) => console.log(json))
 }
 
-const createPad = p => {
-  /* local global */
-  let createBrush
+async function fetchBrushes (p, createBrush) {
+  const res = await window.fetch('api/brushdata')
+  const json = await res.json()
+  await json.forEach((b) => {
+    const newBrushButton = p.createButton(b.name).id(b.name).parent(p.select('.brushesContainer'))
+    bm.addBrush(b.name, b.brush)
+    newBrushButton.mousePressed(() => {
+      createBrush.updateShape(bm.getBrushDraw(newBrushButton.id()))
+    })
+  })
+}
 
-  p.fetchBrushes = () => {
-    window.fetch('api/brushdata')
-      .then((res) => res.json())
-      .then((json) => {
-        json.forEach((b) => {
-          const newBrushButton = p.createButton(b.name).addClass('premade').id(b.name).parent(p.select('.brushesContainer'))
-          bm.addBrush(b.name, b.brush)
-          newBrushButton.mousePressed(() => {
-            createBrush.updateShape(bm.getBrushDraw(newBrushButton.id()))
-            console.log(newBrushButton.id())
-          })
-        })
-      })
-  }
+const createPad = p => {
+  const createBrush = new MyBrush(p, bm.getBrushDraw('none'))
 
   p.setup = () => {
-    createBrush = new MyBrush(p, bm.getBrushDraw('none'))
     p.cnvs = p.createCanvas(p.windowHeight / 2, p.windowHeight / 2).id('createCanvas')
-    p.fetchBrushes()
+
+    fetchBrushes(p, createBrush)
     const premadeButs = p.selectAll('.premade')
     premadeButs.forEach((premade) => {
       premade.mousePressed(() => {
-        console.log(premade.id())
         createBrush.updateShape(bm.getBrushDraw(premade.id()))
       })
     })
@@ -95,7 +90,6 @@ const createPad = p => {
 }
 
 const testPad = p => {
-  /* local global */
   let testBrush
 
   p.setup = () => {
