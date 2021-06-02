@@ -83,7 +83,7 @@ async function createUser (req) {
     avatar: { head: req.body.head, eyes: req.body.eyes, hair: req.body.hair },
     brushes: []
   }
-  const userJson = await JSON.stringify(userDict)
+  const userJson = JSON.stringify(userDict)
   const userDataPath = path.join(__dirname, 'user_data')
   const userImagesPath = path.join(__dirname, 'user_images')
   const userDir = userDataPath + '/' + req.body.id
@@ -102,8 +102,8 @@ async function createUser (req) {
     console.log('error')
   }
   /* Write the new user.json to user_data/id/id.json */
-  const userJsonPath = await userDir + '/' + req.body.id + '.json'
-  await fs.writeFile(userJsonPath, userJson, function (err, result) {
+  const userJsonPath = userDir + '/' + req.body.id + '.json'
+  fs.writeFile(userJsonPath, userJson, function (err, result) {
     if (err) {
       console.log('error')
     }
