@@ -60,8 +60,8 @@ async function hash (pwd) {
 
 /* Create new user post */
 router.post('/api/createuser', async (req, res) => {
-  const dbPath = await path.join(__dirname, 'user_data')
-  const userDir = await dbPath + '/' + req.body.id
+  const dbPath = path.join(__dirname, 'user_data')
+  const userDir = dbPath + '/' + req.body.id
   /* Create new user directory */
   try {
     fs.mkdirSync(userDir)
@@ -84,10 +84,10 @@ async function createUser (req) {
     brushes: []
   }
   const userJson = await JSON.stringify(userDict)
-  const userDataPath = await path.join(__dirname, 'user_data')
-  const userImagesPath = await path.join(__dirname, 'user_images')
-  const userDir = await userDataPath + '/' + req.body.id
-  const userImagesDir = await userImagesPath + '/' + req.body.id
+  const userDataPath = path.join(__dirname, 'user_data')
+  const userImagesPath = path.join(__dirname, 'user_images')
+  const userDir = userDataPath + '/' + req.body.id
+  const userImagesDir = userImagesPath + '/' + req.body.id
   const userImagesBrushDir = userImagesDir + '/brushes'
   const userImagesDesktopDir = userImagesDir + '/desktops'
   const userImagesIconDir = userImagesDir + '/images'
