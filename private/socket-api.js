@@ -27,6 +27,10 @@ module.exports = (socket, io) => {
     socket.broadcast.emit('receiveWhiteboardMouse', data)
   })
 
+  socket.on('broadcastYTUpdate', (data) => {
+    socket.broadcast.emit('receiveYTUpdate', data)
+  })
+
   socket.on('disconnect', () => {
     userToSocketId.delete(socket.userId)
     socket.broadcast.emit('receiveDisconnectedWhiteboardUserId', { id: socket.userId })
