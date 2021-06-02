@@ -12,6 +12,8 @@ const JWT_SECRET = 'hellothisisasecret'
 router.use(bodyParser.json())
 router.use(cookieParser())
 
+router.use(express.static(`${__dirname}/user_images`))
+
 /* Find User JSON File */
 async function getUser (username) {
   const dbPath = path.join(__dirname, 'user_data')
@@ -34,7 +36,7 @@ async function getUser (username) {
   return foundUser
 }
 
-/* POST new brush endpoint */
+/* GET new brush endpoint */
 router.get('/brush-creator/api/brushdata', async (req, res) => {
   const token = req.cookies.AccessToken
   if (!token) return res.json({ error: 'no access token, user not logged in' })
@@ -45,7 +47,16 @@ router.get('/brush-creator/api/brushdata', async (req, res) => {
   const user = await getUser(valid.username)
   if (!user) return res.json({ error: 'user not found' })
 
-  return res.json(user.brushes)
+  const path = 'private/user_data/' + user.id + '/images/brushes.json'
+  const json = fs.readFileSync(path, 'utf8')
+  const brushes = JSON.parse(json)
+
+  const data = []
+  for (const brush of brushes.brushes) {
+    const dataUrl = 'data:image/png;base64,' + fs.readFileSync(brush.path, 'base64')
+    data.push({ name: brush.name, brush: dataUrl })
+  }
+  return res.json(data)
 })
 
 /* POST new brush endpoint */
@@ -62,19 +73,20 @@ router.post('/brush-creator/api/newbrush', async (req, res) => {
   const brushData = req.body.brush
   const brushName = req.body.name
 
-  if (brushName in user.brushes) {
-    console.log('error: brush name taken')
-    res.json({ message: 'error: brush name taken' })
-  }
+  const jsonPath = 'private/user_data/' + user.id + '/images/brushes.json'
+  const brushesJson = fs.readFileSync(jsonPath, 'utf8')
+
+  if (!brushesJson) return res.json({ error: 'could not find brushes.json in user folder' })
+
+  const brushesObj = JSON.parse(brushesJson)
+
+  if (brushName in brushesObj.brushes) return res.json({ error: 'error: brush name taken' })
 
   const path = 'private/user_images/' + user.id + '/brushes/' + brushName + '.png'
-  user.brushes.push({ name: brushName, brush: brushData, path: path })
+  brushesObj.brushes.push({ name: brushName, path: path })
 
-  fs.writeFile('private/user_data/' + user.id + '/' + user.id + '.json', JSON.stringify(user), function (err) {
-    if (err) {
-      console.log(err)
-      res.json({ message: 'error: updating user json' })
-    }
+  fs.writeFile(jsonPath, JSON.stringify(brushesObj), function (err) {
+    if (err) return res.json({ error: 'error: updating user brushes json' })
   })
 
   // strip off the data: url prefix to get just the base64-encoded bytes
@@ -82,13 +94,8 @@ router.post('/brush-creator/api/newbrush', async (req, res) => {
   const buf = Buffer.from(data, 'base64')
 
   fs.writeFile(path, buf, function (err) {
-    if (err) {
-      console.log(err)
-      res.json({ message: 'error: could not save brush' })
-    } else {
-      console.log('saved brush')
-      res.json({ message: 'saved brush' })
-    }
+    if (err) return res.json({ error: 'error: could not save brush' })
+    else return res.json({ message: 'saved brush' })
   })
 })
 
