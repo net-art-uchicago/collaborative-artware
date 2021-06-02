@@ -60,48 +60,48 @@ async function hash (pwd) {
 
 /* Create new user post */
 router.post('/api/createuser', async (req, res) => {
-  const reqcopy = await req
   const dbPath = await path.join(__dirname, 'user_data')
   const userDir = await dbPath + '/' + req.body.id
-  // Create new user directory
-  let success = await dirCheck(userDir)
-  console.log(success)
-  if (1) {
-    return res.json({ error: 'unable to create user' })
-  } else {
-    createUser(reqcopy)
+  /* Create new user directory */
+  try {
+    fs.mkdirSync(userDir)
+    createUser(req)
     return res.json({ success: 'user successfully created' })
+  } catch (err) {
+    return res.json({ error: 'unable to create user' })
   }
 })
 
-/* Check if directory can be created */
-async function dirCheck (dir) {
-  let flag = 0
-  fs.mkdir(dir, (err) => {
-    if (err) {
-      console.log('not created')
-      flag = 1
-    }
-    console.log(flag)
-    return flag
-  })
-}
-
 /* Create a new user */
 async function createUser (req) {
-  console.log('heeeee')
-  // Create dictionary object for user data
+  /* Create dictionary object for user data */
   const userDict = {
     id: req.body.id,
     display_name: req.body.display_name,
-    username: await hash(req.body.username),
-    password: req.body.password,
-    avatar: { head: req.body.head, eyes: req.body.eyes, hair: req.body.hair }
+    username: req.body.username,
+    password: await hash(req.body.password),
+    avatar: { head: req.body.head, eyes: req.body.eyes, hair: req.body.hair },
+    brushes: []
   }
   const userJson = await JSON.stringify(userDict)
-  const dbPath = await path.join(__dirname, 'user_data')
-  const userDir = await dbPath + '/' + req.body.id
-  // Write the new user.json to user_data/id/id.json
+  const userDataPath = await path.join(__dirname, 'user_data')
+  const userImagesPath = await path.join(__dirname, 'user_images')
+  const userDir = await userDataPath + '/' + req.body.id
+  const userImagesDir = await userImagesPath + '/' + req.body.id
+  const userImagesBrushDir = userImagesDir + '/brushes'
+  const userImagesDesktopDir = userImagesDir + '/desktops'
+  const userImagesIconDir = userImagesDir + '/images'
+  /* Create folder in user_images folder and folders for brushes, desktops, and
+  images in that folder */
+  try {
+    fs.mkdirSync(userImagesDir)
+    fs.mkdirSync(userImagesBrushDir)
+    fs.mkdirSync(userImagesDesktopDir)
+    fs.mkdirSync(userImagesIconDir)
+  } catch (err) {
+    console.log('error')
+  }
+  /* Write the new user.json to user_data/id/id.json */
   const userJsonPath = await userDir + '/' + req.body.id + '.json'
   await fs.writeFile(userJsonPath, userJson, function (err, result) {
     if (err) {
