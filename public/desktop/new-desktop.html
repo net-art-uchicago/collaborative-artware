@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TODO: new name + project description -->
+    <title>Collaborative Artware</title>
+    <meta name="description" content="Experimental online drawing application by Media Art and Design students at the University of Chicago">
+    <!-- TODO: social media meta tags -->
+    <!-- TODO: favicon -->
+    <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../desktop/css/styles.css">
+    <link rel="stylesheet" href="../css/draggable.css">
+
+</head>
+<body id="desktop"> 
+  <div class= "desktop-content">
+    <div class= "notepad draggable">
+      <div class="login-header">
+          <button class="white-txt close-button" onclick= "removeNotepad()">X</button>
+          <span class="white-txt"> Untitled - Notepad </span>
+      </div>
+      <div class="border-spacing">
+      </div>
+      <div class="notepad-content">
+          welcome! 
+          click the brush icon to create your own brushes! 
+      </div>
+    </div>
+    <div class= "starter-bar">
+      <button class= "start-button" onclick="showLogOff()"> 
+        <img src="./css/icons/windows-logo.png" class="logo-position" alt="logo">Start</button>
+    </div>
+    <button class="log-off font-10pt hidden">Log Off User</button>
+    <div class="starter-app-icon hidden">
+      <img src="./css/icons/display-brushes.png" class= "resize-icon logo-position"alt="my brushes icon">
+    </div>
+
+
+    <div class= "brush-creation draggable"> 
+      <a href="../brush-creator/index.html" id="brush-creation-open">
+      <img src="./css/icons/make-brushes.png" alt="brush creation icon">
+      <br> <span class="desktop-app white-txt">brush creation</span><br>
+      </a>
+    </div>
+
+
+    <div class= "my-brushes draggable">
+      <button class="my-brushes-button" onclick="showMyBrushes()">
+      <img src="./css/icons/display-brushes.png" alt="my brushes icon" onclick="clickMyBrushes">
+      <br> <span class="desktop-app white-txt">my brushes</span>
+      </button>
+    </div>
+
+    <div class= "my-brushes-app draggable hidden">
+      <button class="white-txt close-button" onclick= "removeMyBrushes()">X</button>
+      <div class= "login-header white-txt"> My Brushes </div>
+      <div class="brushes">
+        <div class="brush-display">TODO: Load user brushes</div> 
+        <div class="brush-display"></div>
+        <div class="brush-display"></div>
+      </div>
+    </div>
+
+
+  <script src="../js/utils/draggable.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
