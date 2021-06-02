@@ -12,34 +12,83 @@ const JWT_SECRET = 'hellothisisasecret'
 router.use(bodyParser.json())
 router.use(cookieParser())
 
+router.use(express.static(`${__dirname}/user_images`))
+
+/* Find User JSON File */
 async function getUser (username) {
   const dbPath = path.join(__dirname, 'user_data')
   let foundUser
   const files = await fs.promises.readdir(dbPath)
   for (const file of files) {
-    const userPath = path.join(dbPath, file)
-    // Stat the file to see if we have a file or dir
-    const stat = await fs.promises.stat(userPath)
-    if (stat.isDirectory()) {
-      const jsonPath = path.join(userPath, file + '.json')
-      const json = fs.readFileSync(jsonPath, 'utf8')
-      const user = JSON.parse(json)
-      console.log(user.username)
-      if (user.username === username) {
-        foundUser = user
-        break
-      }
+    const jsonPath = path.join(dbPath, file)
+    const json = fs.readFileSync(jsonPath, 'utf8')
+    const user = JSON.parse(json)
+    if (user.username === username) {
+      foundUser = user
+      break
     }
   }
   return foundUser
 }
 
-/* Login POST/GET */
+/* GET new brush endpoint */
+router.get('/brush-creator/api/brushdata', async (req, res) => {
+  const token = req.cookies.AccessToken
+  if (!token) return res.json({ error: 'no access token, user not logged in' })
+
+  const valid = await jwt.verify(token, JWT_SECRET)
+  if (!valid) return res.json({ error: 'not a valid token' })
+
+  const user = await getUser(valid.username)
+  if (!user) return res.json({ error: 'user not found' })
+
+  const data = []
+  for (const brush of user.brushes) {
+    data.push({ name: brush.name, brush: brush.path })
+  }
+  return res.json(data)
+})
+
+/* POST new brush endpoint */
+router.post('/brush-creator/api/newbrush', async (req, res) => {
+  const token = req.cookies.AccessToken
+  if (!token) return res.json({ error: 'no access token, user not logged in' })
+
+  const valid = await jwt.verify(token, JWT_SECRET)
+  if (!valid) return res.json({ error: 'not a valid token' })
+
+  const user = await getUser(valid.username)
+  if (!user) return res.json({ error: 'user not found' })
+
+  const brushData = req.body.brush
+  const brushName = req.body.name
+
+  if (brushName in user.brushes) return res.json({ error: 'error: brush name taken' })
+
+  const path = user.id + '/brushes/' + brushName + '.png'
+  const pathImage = 'private/user_images/' + path
+  const pathUser = 'private/user_data/' + user.id + '.json'
+  user.brushes.push({ name: brushName, path: path })
+
+  fs.writeFile(pathUser, JSON.stringify(user), function (err) {
+    if (err) return res.json({ error: 'error: updating user brushes json' })
+  })
+
+  // strip off the data: url prefix to get just the base64-encoded bytes
+  const data = brushData.replace(/^data:image\/\w+;base64,/, '')
+  const buf = Buffer.from(data, 'base64')
+
+  fs.writeFile(pathImage, buf, function (err) {
+    if (err) return res.json({ error: 'error: could not save brush' })
+    else return res.json({ message: 'saved brush' })
+  })
+})
+
+/* POST login endpoint */
 router.post('/api/login', async (req, res) => {
   const user = await getUser(req.body.username)
   if (!user) return res.json({ error: 'user not found' })
 
-  // const valid = req.body.password === foundUser.password
   const valid = await bcrypt.compare(req.body.password, user.password)
   if (!valid) return res.json({ error: 'wrong password' })
 

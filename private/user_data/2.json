@@ -3,5 +3,6 @@
    "display_name": "test2",
    "username": "test2username",
    "password": "letmein2",
-   "avatar": {"head": 1, "eyes": 2, "hair": 5}
+   "avatar": {"head": 1, "eyes": 2, "hair": 5},
+   "brushes": []
 }
