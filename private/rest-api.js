@@ -44,8 +44,7 @@ router.get('/brush-creator/api/brushdata', async (req, res) => {
 
   const data = []
   for (const brush of user.brushes) {
-    const dataUrl = 'data:image/png;base64,' + fs.readFileSync(brush.path, 'base64')
-    data.push({ name: brush.name, brush: dataUrl })
+    data.push({ name: brush.name, brush: brush.path })
   }
   return res.json(data)
 })
@@ -66,9 +65,10 @@ router.post('/brush-creator/api/newbrush', async (req, res) => {
 
   if (brushName in user.brushes) return res.json({ error: 'error: brush name taken' })
 
-  const pathImage = 'private/user_images/' + user.id + '/brushes/' + brushName + '.png'
+  const path = user.id + '/brushes/' + brushName + '.png'
+  const pathImage = 'private/user_images/' + path
   const pathUser = 'private/user_data/' + user.id + '.json'
-  user.brushes.push({ name: brushName, path: pathImage })
+  user.brushes.push({ name: brushName, path: path })
 
   fs.writeFile(pathUser, JSON.stringify(user), function (err) {
     if (err) return res.json({ error: 'error: updating user brushes json' })
