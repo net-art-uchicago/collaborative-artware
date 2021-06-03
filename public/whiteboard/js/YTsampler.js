@@ -25,6 +25,7 @@ class YTSampler extends window.HTMLElement {
     const btn = this.querySelector('button')
     const url = this.querySelector('input')
     btn.addEventListener('click', () => {
+      this._emit('videoLoaded', url.value)
       this.loadVideo(url.value)
     })
   }
@@ -47,14 +48,19 @@ class YTSampler extends window.HTMLElement {
     btn.textContent = 'play'
     btn.addEventListener('click', () => {
       if (btn.textContent === 'play') {
+        this._emit('videoPlayed')
         this.play()
-        btn.textContent = 'pause'
       } else {
+        this._emit('videoPaused')
         this.pause()
-        btn.textContent = 'play'
       }
     })
     sec.appendChild(btn)
+  }
+
+  _changeToggle (text) {
+    const toggle = this.querySelector('.yt-toggle-button')
+    toggle.textContent = text
   }
 
   _playerLoaded (e) {
@@ -94,6 +100,12 @@ class YTSampler extends window.HTMLElement {
     return videoId
   }
 
+  _emit (name, data) {
+    const eveObj = { detail: data }
+    const eve = new window.CustomEvent(name, eveObj)
+    this.dispatchEvent(eve)
+  }
+
   loadVideo (url) {
     if (url === '') return window.alert('missing Youtube Url')
     const vidId = this._idFromUrl(url)
@@ -108,10 +120,12 @@ class YTSampler extends window.HTMLElement {
 
   play () {
     this.player.playVideo()
+    this._changeToggle('pause')
   }
 
   pause () {
     this.player.pauseVideo()
+    this._changeToggle('play')
   }
 
   stop () {

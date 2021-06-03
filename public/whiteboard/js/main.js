@@ -77,6 +77,24 @@ window.p5Obj = new p5((p) => {
     youTube.position(0, de.scrollTop)
     youTube.id('youTubeSampler')
     youTube.parent('tools')
+
+    youTube.elt.addEventListener('videoLoaded', (e) => {
+      socket.emit('broadcastYTUpdate', { type: 'load', url: e.detail })
+    })
+
+    youTube.elt.addEventListener('videoPlayed', () => {
+      socket.emit('broadcastYTUpdate', { type: 'play' })
+    })
+
+    youTube.elt.addEventListener('videoPaused', () => {
+      socket.emit('broadcastYTUpdate', { type: 'pause' })
+    })
+
+    socket.on('receiveYTUpdate', (data) => {
+      if (data.type === 'play') youTube.elt.play()
+      else if (data.type === 'pause') youTube.elt.pause()
+      else if (data.type === 'load') youTube.elt.loadVideo(data.url)
+    })
   }
 
   p.draw = () => {

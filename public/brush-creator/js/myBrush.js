@@ -6,10 +6,12 @@ class MyBrush {
     this.x2 = null
     this.y2 = null
     this.shape = shape
+    this.img = null
   }
 
   updateShape (newShape) {
     this.shape = newShape
+    this.img = null
   }
 
   up () {
