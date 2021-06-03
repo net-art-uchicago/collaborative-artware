@@ -91,19 +91,56 @@ canvas {
   color: var(--theme-color-3);
 }
 
-.desktop-button {
+.button, .desktop-button, .close-button, .start-button, .log-off {
   box-sizing: border-box;
   border: none;
   background: var(--surface);
   box-shadow: var(--border-raised-outer), var(--border-raised-inner);
-  min-width: 260px;
-  min-height: 30px;
-  margin-left: 5px;
-  font-family: 'Trebuchet MS', sans-serif;
   font-size: 10pt;
 }
 
-.desktop-button:active {
+.desktop-button{
+  margin-left: 5px;
+  width: 260px;
+  height: 30px;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.close-button{
+  width: 22px; 
+  height: 20px;
+  position: absolute;
+  left: 93%;
+  top: 5px;
+  margin-right: 35px;
+  font-family: 'Gill Sans', sans-serif;
+  font-weight: 600;
+  padding: 0px;
+}
+
+.start-button{
+  width: 95px; 
+  height: 34px;
+  font-family: 'Trebuchet MS', sans-serif;
+  line-height: 44px;
+  font-weight: bold;
+}
+
+.log-off{
+  width: 105px;
+  height: 35px; 
+  position: fixed;
+  bottom: 4%;
+  padding: 0px;
+  vertical-align: middle;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.log-off:active {
+  background: var(--theme-color-3);
+}
+
+.button:active, .desktop-button:active, .close-button:active, .start-button:active {
   outline: 1pt;
   outline-style: dotted;
   outline-offset: -5px;
@@ -131,4 +168,12 @@ input[type=text], input[type=password], select {
 
 .font-10pt{
   font-size: 10pt;
+}
+
+.logo-position {
+  float: left;
+}
+
+.hidden {
+  display: none; 
 }
