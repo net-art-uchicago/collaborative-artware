@@ -25,7 +25,7 @@ async function fetchBrushes (p, createBrush) {
   const json = await res.json()
   await json.forEach((b) => {
     const newBrushButton = p.createButton(b.name).id(b.name).parent(p.select('.brushesContainer'))
-    bm.addBrush(b.name, b.brush)
+    bm.addBrush(b.name, '../' + b.brush)
     newBrushButton.mousePressed(() => {
       createBrush.updateShape(bm.getBrushDraw(newBrushButton.id()))
     })

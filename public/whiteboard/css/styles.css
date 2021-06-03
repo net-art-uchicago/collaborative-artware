@@ -1,3 +1,60 @@
+.tools-header {
+  background: linear-gradient(
+    90deg,
+    var(--theme-color-3),
+    var(--theme-color-4)
+  );
+  height: 25px;
+  padding: 5px;
+  margin: 5px;
+  font-size: 16px;
+}
+
+#sizeSlider {
+  margin: 60px 0px 0px 15px;
+}
+
+#youTubeSampler {
+  margin: 250px 0px 0px 5px;
+  width: 140px;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+#colorPicker {
+  margin: 30px 0px 0px 50px;
+}
+
 #saveButton {
-    margin: 50px 0px 0px 10px;
-  }
+  margin: 160px 0px 0px 30px;
+  font-family: 'Trebuchet MS', sans-serif;
+  text-align: center;
+}
+
+#brushPicker {
+  margin: 95px 0px 0px 5px;
+  width: 140px;
+  font-family: 'Trebuchet MS', sans-serif;
+  text-align: center;
+}
+
+#tools {
+  width: 150px;
+  height: 320px;
+  z-index: 100;
+  position: fixed;
+  top: 20px;
+  left: 5px;
+  margin: 0;
+  background-color: var(--surface);
+  border-width: var(--border-width);
+  box-shadow: var(--border-window-outer), var(--border-window-inner);
+  background: var(--surface);
+}
+
+body {
+  background: linear-gradient(
+      #C09DF7,
+      var(--theme-color-5)
+    );
+  height: 1000px; 
+}
