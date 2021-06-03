@@ -47,5 +47,9 @@ button.addEventListener('click', () => {
   }
   window.fetch('/api/login', opts)
     .then((res) => res.json())
-    .then((json) => console.log(json))
+    .then((json) => {
+      if (json.message === 'access granted') {
+        window.location = '/desktop/new-desktop.html'
+      }
+    })
 })
