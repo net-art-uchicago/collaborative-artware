@@ -65,15 +65,6 @@ body {
     border: 0px solid #ff80ef;
 }
 
-canvas{
-    background: black;
-}
-
-/* .drawingPad{
-    border: 2px solid salmon;
-    margin: 3px;
-} */
-
 .settingsContainer {
   background: linear-gradient(
     #C09DF7,
